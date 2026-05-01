@@ -1957,20 +1957,24 @@ svg {
 @media (max-width: 767px) {
     .ultimos-cultos {
         min-height: 0;
+        align-items: center;
     }
 
     .videos-container {
         flex-direction: column;
         flex-wrap: nowrap;
-        align-items: stretch;
+        align-items: center;
         gap: 16px;
+        width: 100%;
         max-width: 100%;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     .videos-container iframe {
         flex: none;
-        width: 100%;
-        max-width: 100%;
+        width: min(100%, 560px);
+        max-width: min(100%, 560px);
         height: auto;
         aspect-ratio: 16 / 9;
         min-height: 200px;
