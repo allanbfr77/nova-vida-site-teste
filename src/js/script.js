@@ -1,6 +1,7 @@
 import "../css/styles.css";
 document.addEventListener("DOMContentLoaded", async () => {
     await loadComponent("#header", "header.html");
+    setupDesktopMinistrySubmenu();
     await setupMobileMenu();
 
     await loadComponent("#footer", "footer.html");
@@ -338,9 +339,11 @@ async function carregarVideos() {
 }
 
 
-// Função para inicializar o calendário
+// Função para inicializar o calendário (só em páginas que têm #calendar-container)
 function initializeCalendar() {
     const calendarContainer = document.getElementById('calendar-container');
+    if (!calendarContainer) return;
+
     let lastMode = null;
     let lastUpdate = 0;
 
@@ -366,16 +369,16 @@ function initializeCalendar() {
         if (iframe) {
             // Só atualiza o src e propriedades
             iframe.src = src;
-            iframe.height = newMode === 'AGENDA' ? '600' : '550';
+            iframe.height = '280';
             iframe.scrolling = newMode === 'AGENDA' ? 'yes' : 'no';
         } else {
             // Cria o iframe apenas uma vez
             iframe = document.createElement('iframe');
             iframe.src = src;
             iframe.width = '100%';
-            iframe.height = newMode === 'AGENDA' ? '600' : '550';
+            iframe.height = '280';
             iframe.style.border = 'none';
-            iframe.style.borderRadius = '12px';
+            iframe.style.borderRadius = '8px';
             iframe.frameBorder = '0';
             iframe.scrolling = newMode === 'AGENDA' ? 'yes' : 'no';
             calendarContainer.appendChild(iframe);
@@ -423,6 +426,54 @@ function mostrarProximoCulto() {
             container.innerHTML = estaAoVivo
             ? `🎥 Culto ao vivo agora! <a href="${link}" target="_blank">Clique para assistir</a>`
             : `🗓️ Próximo culto: ${horaFormatada}. <a href="${link}" target="_blank">Clique para assistir</a>`;
+}
+
+/**
+ * Desktop: submenu de Ministérios em position fixed no viewport (evita ficar atrás dos cards por stacking context).
+ * Mobile (≤1024px): remove estilos inline — o CSS do menu coluna continua valendo.
+ */
+function setupDesktopMinistrySubmenu() {
+    const menuItem = document.querySelector("li.menu-item");
+    const submenu = menuItem?.querySelector(".submenu");
+    if (!menuItem || !submenu) return;
+
+    const desktopMq = window.matchMedia("(min-width: 1025px)");
+
+    function clearFixedLayer() {
+        submenu.style.position = "";
+        submenu.style.top = "";
+        submenu.style.left = "";
+        submenu.style.right = "";
+        submenu.style.zIndex = "";
+        submenu.style.minWidth = "";
+    }
+
+    function repositionFixedSubmenu() {
+        if (!desktopMq.matches) {
+            clearFixedLayer();
+            return;
+        }
+        const r = menuItem.getBoundingClientRect();
+        submenu.style.position = "fixed";
+        submenu.style.top = `${Math.round(r.bottom)}px`;
+        submenu.style.left = `${Math.round(r.left)}px`;
+        submenu.style.right = "auto";
+        submenu.style.zIndex = "2147483647";
+        submenu.style.minWidth = `${Math.max(180, Math.round(r.width))}px`;
+    }
+
+    menuItem.addEventListener("mouseenter", repositionFixedSubmenu);
+    menuItem.addEventListener("mouseleave", () => {
+        if (desktopMq.matches) clearFixedLayer();
+    });
+    window.addEventListener("scroll", repositionFixedSubmenu, { passive: true });
+    window.addEventListener("resize", () => {
+        if (desktopMq.matches) repositionFixedSubmenu();
+        else clearFixedLayer();
+    });
+    desktopMq.addEventListener("change", () => {
+        if (!desktopMq.matches) clearFixedLayer();
+    });
 }
 
 // ==== Novo: toggle menu (sem aria) ====
