@@ -892,13 +892,22 @@ hr {
     flex-shrink: 0;
 }
 
+/* Ministérios — web/desktop: 5 cards na 1ª linha + 4 na 2ª; células até 325px (referência ~325×350) */
+.section-ministerios .cards-container {
+    grid-template-columns: repeat(5, minmax(0, 325px));
+    justify-content: center;
+    width: 100%;
+    max-width: min(calc(5 * 325px + 4 * 20px + 2 * clamp(20px, 4vw, 48px)), 100%);
+}
+
 .section-ministerios .cards-container .card {
     width: 100%;
+    max-width: none;
     min-width: 0;
     box-sizing: border-box;
-    /* Levemente mais alto que largo: cabe título em 2 linhas sem “apertar” o quadrado */
-    aspect-ratio: 1 / 1.08;
+    aspect-ratio: 325 / 350;
     height: auto;
+    justify-self: stretch;
     border-radius: 10px;
     border: 1px solid #c9a84c;
     background: rgba(42, 33, 24, 0.62);
@@ -909,10 +918,35 @@ hr {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    padding: 10px 8px;
+    gap: 10px;
+    padding: 24px;
     transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
     flex-shrink: 1;
+}
+
+/* Tipografia maior na grade web (mobile sobrescreve abaixo em ≤767px) */
+.section-ministerios .cards-container .card-icon {
+    font-size: 3.35rem;
+    margin-bottom: 2px;
+    line-height: 1;
+}
+
+.section-ministerios .cards-container .card-label {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    line-height: 1.12;
+}
+
+.section-ministerios .cards-container .card-name {
+    font-size: 16px;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+}
+
+.section-ministerios .cards-container .card#evangelismo .card-name {
+    font-size: 11px;
+    letter-spacing: 0.03em;
+    line-height: 1.15;
 }
 
 .section-ministerios .cards-container .card:hover {
@@ -954,52 +988,61 @@ hr {
     hyphens: auto;
 }
 
-/* Ministérios — mobile: coluna única, texto e ícones grandes para leitura confortável */
+/* Ministérios — mobile: cards 250×250 com padding 24px (referência layout) */
 @media (max-width: 767px) {
     .section-ministerios .cards-container {
+        --ministerio-card-size: min(250px, calc(100vw - 32px));
         grid-template-columns: 1fr;
-        max-width: min(440px, calc(100vw - 24px));
+        max-width: calc(var(--ministerio-card-size) + 24px);
         width: 100%;
         margin-left: auto;
         margin-right: auto;
         padding: 16px max(10px, env(safe-area-inset-right, 0px)) 1.25rem max(10px, env(safe-area-inset-left, 0px));
-        gap: 14px;
+        gap: 16px;
         grid-auto-rows: auto;
+        justify-items: center;
     }
 
-    .section-ministerios .card {
-        width: 100%;
-        max-width: none;
-        height: auto;
-        aspect-ratio: 1 / 1.06;
-        align-self: start;
-        justify-self: stretch;
-        padding: 18px 14px;
-        gap: 10px;
+    .section-ministerios .cards-container .card {
+        box-sizing: border-box;
+        width: var(--ministerio-card-size);
+        height: var(--ministerio-card-size);
+        max-width: 100%;
+        padding: 24px;
+        margin-left: auto;
+        margin-right: auto;
+        align-self: center;
+        justify-self: center;
+        aspect-ratio: 1 / 1;
+        gap: 8px;
     }
 
-    .section-ministerios .card-icon {
-        font-size: 2.75rem;
-        margin-bottom: 4px;
+    .section-ministerios .cards-container .card-icon {
+        font-size: 3rem;
+        margin-bottom: 2px;
+        line-height: 1;
     }
 
-    .section-ministerios .card-label {
-        font-size: 13px;
-        letter-spacing: 0.07em;
+    .section-ministerios .cards-container .card-label {
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        line-height: 1.15;
     }
 
-    .section-ministerios .card-name {
-        font-size: 16px;
-        letter-spacing: 0.035em;
-        line-height: 1.25;
+    .section-ministerios .cards-container .card-name {
+        font-size: 15px;
+        letter-spacing: 0.04em;
+        line-height: 1.2;
     }
 
-    .section-ministerios .card:hover {
+    .section-ministerios .cards-container .card:hover {
         transform: translateY(-4px);
     }
 
-    .card#evangelismo .card-name {
-        font-size: 14px;
+    .section-ministerios .cards-container .card#evangelismo .card-name {
+        font-size: 12px;
+        letter-spacing: 0.03em;
+        line-height: 1.2;
     }
 }
 
@@ -1031,7 +1074,7 @@ hr {
  */
 @media (min-width: 768px) {
     .section-ministerios #expanded-content:not(.hidden) {
-        max-width: 1600px;
+        max-width: 1780px;
         width: 100%;
         margin-left: auto;
         margin-right: auto;
@@ -1088,11 +1131,18 @@ hr {
 /* --- Painel detalhe dos ministérios (paleta marrom/dourada INVB) --- */
 .expanded-item--invb {
     box-sizing: border-box;
-    background: linear-gradient(165deg, #3a2e22 0%, #2a2118 42%, #1c1612 100%);
-    border: 1px solid rgba(201, 168, 76, 0.5);
+    background: linear-gradient(
+        165deg,
+        rgba(58, 46, 34, 0.72) 0%,
+        rgba(42, 33, 24, 0.68) 42%,
+        rgba(28, 22, 18, 0.62) 100%
+    );
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(201, 168, 76, 0.45);
     box-shadow:
-        0 10px 36px rgba(0, 0, 0, 0.38),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        0 10px 36px rgba(0, 0, 0, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
     color: #ebe2d6;
     gap: clamp(1.25rem, 3vw, 2rem);
     max-width: 100%;
@@ -1787,17 +1837,17 @@ svg {
         font-size: 0.7rem;
         margin-top: 10px;
     }
-    .section-ministerios .card-icon {
-        font-size: 2.6rem;
+    .section-ministerios .cards-container .card-icon {
+        font-size: 2.85rem;
     }
-    .section-ministerios .card-label {
-        font-size: 12px;
+    .section-ministerios .cards-container .card-label {
+        font-size: 11px;
     }
-    .section-ministerios .card-name {
-        font-size: 15px;
+    .section-ministerios .cards-container .card-name {
+        font-size: 14px;
     }
-    .card#evangelismo .card-name {
-        font-size: 13px;
+    .section-ministerios .cards-container .card#evangelismo .card-name {
+        font-size: 11px;
     }
     .social-icons li a {
         font-size: 17px;
