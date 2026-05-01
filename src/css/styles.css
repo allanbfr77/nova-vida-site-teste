@@ -882,7 +882,7 @@ hr {
     flex-shrink: 0;
 }
 
-.card {
+.section-ministerios .cards-container .card {
     width: 100%;
     min-width: 0;
     min-height: 0;
@@ -890,22 +890,24 @@ hr {
     height: auto;
     border-radius: 10px;
     border: 1px solid #c9a84c;
-    background: #2a2118;
+    background: rgba(42, 33, 24, 0.62);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     cursor: pointer;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 6px;
-    transition: all 0.2s ease;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
     flex-shrink: 1;
 }
 
-.card:hover {
+.section-ministerios .cards-container .card:hover {
     border-color: #e8c96a;
-    background: #332819;
+    background: rgba(51, 40, 25, 0.78);
     transform: translateY(-8px);
-    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.45);
 }
 
 .card-icon {

@@ -85,7 +85,13 @@ module.exports = (env = {}, argv) => {
         {
           test: /\.css$/i,
           use: [
-            isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
+            isProduction
+              ? {
+                loader: MiniCssExtractPlugin.loader,
+                /** 'auto' = URLs relativas ao CSS; fundo e imagens funcionam em / e em /repo/ (GitHub Pages) */
+                options: { publicPath: 'auto' },
+              }
+              : 'style-loader',
             'css-loader',
           ],
         },
