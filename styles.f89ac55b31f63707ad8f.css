@@ -6,7 +6,6 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background-size: cover;
     color: #fff;
     display: flex;
     flex-direction: column;
@@ -23,9 +22,16 @@ footer {
     flex-shrink: 0;
 }
 
+/* Fundo: cover na altura *inteira* da página parece “zoom” enorme. Foto = 100% da largura + altura natural; gradiente cobre todo o bloco. */
 .section-index{
-    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.7)), url(assets/images/image.7282c21ac6fe23917fc0.jpg) no-repeat center center scroll;
-    background-size: cover;
+    background-color: #14110e;
+    background-image:
+        linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.7)),
+        url(assets/images/image.7282c21ac6fe23917fc0.jpg);
+    background-repeat: no-repeat, no-repeat;
+    background-position: center center, center top;
+    background-size: 100% 100%, 100% auto;
+    background-attachment: scroll, scroll;
     min-height: 100vh;
     min-height: 100svh;
     min-height: 100dvh;
@@ -1107,6 +1113,25 @@ hr {
     font-size: clamp(4.25rem, min(22vw, 20vmin), 7.5rem);
     line-height: 1;
     color: #c9a84c;
+}
+
+/* Louvor: foto no painel (demais ministérios seguem com ícone) */
+.expanded-item--invb .expanded-item__figure--photo {
+    display: block;
+    padding: 0;
+    background: none;
+}
+
+.expanded-item--invb .expanded-item__figure--photo .expanded-image {
+    width: 100%;
+    height: 100%;
+    min-height: 260px;
+    max-width: none;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 0;
+    display: block;
+    aspect-ratio: auto;
 }
 
 .expanded-item--invb .ministerio-expanded-title {
@@ -2191,6 +2216,21 @@ svg {
         font-size: clamp(3.75rem, 22vw, 6.5rem);
     }
 
+    .expanded-item--invb .expanded-item__figure--photo {
+        min-height: 200px;
+        max-height: min(52vw, 320px);
+        aspect-ratio: 16 / 10;
+    }
+
+    .expanded-item--invb .expanded-item__figure--photo .expanded-image {
+        min-height: 200px;
+        max-height: min(52vw, 320px);
+        aspect-ratio: 16 / 10;
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+
     /* Sem “zoom” no toque — evita sensação estranha no painel */
     .expanded-item:hover {
         transform: none;
@@ -2257,7 +2297,7 @@ svg {
         line-height: 1.25;
     }
 
-    /* Overlay só quando houver foto no figure */
+    /* Overlay em figure com foto (não ícone) */
     .expanded-item--invb .expanded-item__figure:not(.expanded-item__figure--icon)::after {
         background: linear-gradient(
             to bottom,
@@ -2391,6 +2431,17 @@ svg {
         font-size: clamp(3.25rem, 20vw, 5.5rem);
     }
 
+    .expanded-item--invb .expanded-item__figure--photo {
+        min-height: 170px;
+        max-height: min(44vw, 248px);
+        aspect-ratio: 16 / 10;
+    }
+
+    .expanded-item--invb .expanded-item__figure--photo .expanded-image {
+        min-height: 170px;
+        max-height: min(44vw, 248px);
+    }
+
     .expanded-item--invb .ministerio-atividades li {
         min-height: 3rem;
         padding-left: 2.55rem;
@@ -2437,4 +2488,4 @@ svg {
 
 
 
-/*# sourceMappingURL=styles.914a646289935269d3e6.css.map*/
+/*# sourceMappingURL=styles.f89ac55b31f63707ad8f.css.map*/
