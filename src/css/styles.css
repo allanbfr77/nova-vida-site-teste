@@ -22,7 +22,7 @@ footer {
     flex-shrink: 0;
 }
 
-/* Fundo: cover na altura *inteira* da página parece “zoom” enorme. Foto = 100% da largura + altura natural; gradiente cobre todo o bloco. */
+/* Fundo da foto: fixed na viewport; foto em cover (preenche web e mobile); degradê cobre a tela inteira. Mesmo padrão nas páginas que usam image.jpg */
 .section-index{
     background-color: #14110e;
     background-image:
@@ -31,7 +31,7 @@ footer {
     background-repeat: no-repeat, no-repeat;
     background-position: center center, center center;
     background-size: 100% 100%, cover;
-    background-attachment: scroll, fixed;
+    background-attachment: fixed, fixed;
     min-height: 100vh;
     min-height: 100svh;
     min-height: 100dvh;
@@ -39,8 +39,14 @@ footer {
 .section-cultos,
 .section-doe,
 .section-estudo {
-    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../assets/images/image.jpg') no-repeat center center scroll;
-    background-size: cover;
+    background-color: #14110e;
+    background-image:
+        linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+        url('../assets/images/image.jpg');
+    background-repeat: no-repeat, no-repeat;
+    background-position: center center, center center;
+    background-size: 100% 100%, cover;
+    background-attachment: fixed, fixed;
 }
 
 /* Estilos do cabeçalho */
@@ -529,8 +535,14 @@ nav ul li a:hover {
 
 /* Seção Contato */
 .section-contato {
-    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../assets/images/image.jpg') no-repeat center center scroll;
-    background-size: cover;
+    background-color: #14110e;
+    background-image:
+        linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+        url('../assets/images/image.jpg');
+    background-repeat: no-repeat, no-repeat;
+    background-position: center center, center center;
+    background-size: 100% 100%, cover;
+    background-attachment: fixed, fixed;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -886,17 +898,21 @@ hr {
     padding-top: calc(70px + env(safe-area-inset-top, 0px) + 16px);
 }
 
-/* Camada de imagem de fundo: fixed no desktop (parallax) → absolute no mobile (rola com a seção) */
+/* Camada de fundo: fixed na viewport; foto em cover (preenche a tela), igual às demais páginas */
 .section-ministerios::before {
     content: "";
     position: fixed;
     inset: 0;
     width: 100%;
     height: 100%;
-    background:
+    background-color: #14110e;
+    background-image:
         linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.72)),
-        url('../assets/images/image.jpg') no-repeat center center;
-    background-size: cover;
+        url('../assets/images/image.jpg');
+    background-repeat: no-repeat, no-repeat;
+    background-position: center center, center center;
+    background-size: 100% 100%, cover;
+    background-attachment: fixed, fixed;
     z-index: 0;
     pointer-events: none;
 }
@@ -910,7 +926,7 @@ hr {
     margin-top: auto;
 }
 
-/* Conteúdo acima da camada decorativa ::before (scroll no mobile não esconde o rodapé) */
+/* Conteúdo acima da camada decorativa ::before */
 .section-ministerios .cards-container,
 .section-ministerios #expanded-items {
     position: relative;
@@ -982,16 +998,29 @@ hr {
     line-height: 1.2;
 }
 
-.section-ministerios .cards-container .card#evangelismo .card-name {
-    font-size: 11px;
-    letter-spacing: 0.03em;
-    line-height: 1.15;
-}
-
+/* Hover: brilho de fundo e sombra (borda da cor padrão no mobile; na web ver @media abaixo) */
 .section-ministerios .cards-container .card:hover {
-    border-color: #e8c96a;
     background: rgba(201, 168, 76, 0.18);
     box-shadow: 0 0 0 2px rgba(201, 168, 76, 0.35), 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+/* Web (≥768px): uma só borda branca no hover/foco — sem anel extra no box-shadow */
+@media (min-width: 768px) {
+    .section-ministerios .cards-container .card:hover {
+        border-color: #ffffff;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .section-ministerios .cards-container .card:active {
+        border-color: #ffffff;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .section-ministerios .cards-container .card:focus-visible {
+        border-color: #ffffff;
+        outline: none;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
 }
 
 .card-icon {
@@ -1077,12 +1106,6 @@ hr {
         border-color: #e8c96a;
         background: rgba(201, 168, 76, 0.18);
         box-shadow: 0 0 0 2px rgba(201, 168, 76, 0.35), 0 8px 24px rgba(0, 0, 0, 0.35);
-    }
-
-    .section-ministerios .cards-container .card#evangelismo .card-name {
-        font-size: 12px;
-        letter-spacing: 0.03em;
-        line-height: 1.2;
     }
 }
 
@@ -1337,17 +1360,10 @@ hr {
     font-size: 0.72rem;
 }
 
-.expanded-item--invb[data-id="evangelismo"] .ministerio-expanded-title__name,
 .expanded-item--invb[data-id="introducao"] .ministerio-expanded-title__name {
     font-size: clamp(1.3rem, 2.5vw, 1.9rem);
     line-height: 1.28;
     max-width: min(100%, 24rem);
-}
-
-.card#evangelismo .card-name {
-    font-size: clamp(10px, 1.05vw, 12px);
-    letter-spacing: 0.03em;
-    line-height: 1.2;
 }
 
 /* Ministérios: card ativo some da grade enquanto o painel detalhe está aberto */
@@ -1722,16 +1738,6 @@ svg {
     }
 }
 
-/* Mobile: ::before passa de fixed para absolute — fundo rola com a secao, rodape nao some */
-@media (max-width: 768px) {
-    .section-ministerios::before {
-        position: absolute;
-        height: 100%;
-        min-height: 100%;
-    }
-}
-
-
 @media (max-width: 540px) {
     
 
@@ -1876,9 +1882,6 @@ svg {
     }
     .section-ministerios .cards-container .card-name {
         font-size: 14px;
-    }
-    .section-ministerios .cards-container .card#evangelismo .card-name {
-        font-size: 11px;
     }
     .social-icons li a {
         font-size: 17px;
@@ -2060,7 +2063,8 @@ svg {
         min-width: 52px;
         min-height: 52px;
         background: none;
-        border: 1px solid transparent;
+        border: none;
+        outline: none;
         border-radius: 10px;
         cursor: pointer;
         margin: 0;
@@ -2091,7 +2095,8 @@ svg {
     }
 
     .navbar__toggle.active {
-        border-color: rgba(255, 255, 255, 0.4);
+        border: none;
+        outline: none;
         background: rgba(0, 0, 0, 0.35);
     }
 
@@ -2307,7 +2312,6 @@ svg {
         transform: translateY(-50%);
     }
 
-    .expanded-item--invb[data-id="evangelismo"] .ministerio-expanded-title__name,
     .expanded-item--invb[data-id="introducao"] .ministerio-expanded-title__name {
         font-size: clamp(0.85rem, 4.5vw, 1.28rem);
         max-width: 100%;

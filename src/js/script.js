@@ -61,6 +61,23 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
+    /** Mobile (≤767px, mesma faixa do grid em coluna única): fila circular — o card do topo vai para o fim ao ser escolhido. */
+    function ministryIsMobileCardQueueViewport() {
+        return typeof window.matchMedia === 'function'
+            && window.matchMedia('(max-width: 767px)').matches;
+    }
+
+    function ministryRotateTopCardToEnd(card) {
+        if (!ministeriosSection || !card || !ministryIsMobileCardQueueViewport()) return;
+        const cardsContainer = ministeriosSection.querySelector('.cards-container');
+        if (!cardsContainer) return;
+        const cards = cardsContainer.querySelectorAll('.card');
+        if (cards.length <= 1) return;
+        const firstInDom = cardsContainer.querySelector('.card');
+        if (firstInDom !== card) return;
+        cardsContainer.appendChild(card);
+    }
+
     if (ministeriosSection && expandedContent && ministryCards.length) {
         ministryCards.forEach((card) => {
             card.addEventListener("click", () => {
@@ -68,6 +85,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const item = ministeriosSection.querySelector(`#expanded-items .expanded-item[data-id="${id}"]`);
                 if (!item) return;
                 ministryClearHiddenCards();
+                ministryRotateTopCardToEnd(card);
                 expandedContent.innerHTML = "";
                 expandedContent.appendChild(item.cloneNode(true));
                 expandedContent.classList.remove("hidden");
