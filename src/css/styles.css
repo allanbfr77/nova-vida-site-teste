@@ -170,11 +170,17 @@ nav ul li a:hover {
     /* Centraliza o texto */
 }
 
+.section-home .text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
 .section-home .text h1,
 .section-home .text h4,
 .section-home .text p {
     margin: 0;
-    /* Remove qualquer margem do h1, h4, e p */
 }
 
 .section-home .text h1 {
@@ -505,30 +511,59 @@ nav ul li a:hover {
     align-items: center;
     height: auto;
     min-height: 75vh;
-    padding: 90px 20px;
+    padding-top: max(clamp(5.5rem, 14vw, 6.5rem), calc(70px + env(safe-area-inset-top, 0px) + 12px));
+    padding-right: clamp(16px, 4vw, 28px);
+    padding-bottom: clamp(2rem, 6vw, 3rem);
+    padding-left: clamp(16px, 4vw, 28px);
     transition: opacity 1s ease-out;
     text-align: center;
     font-family: 'Montserrat', sans-serif;
+    box-sizing: border-box;
 }
 
-.section-contato .text {
+/* Card alinhado aos blocos cultos / eventos / calendário (vidro + borda dourada) */
+.section-contato .contato-glass-card {
     width: 100%;
-    max-width: 500px;
-    padding: 30px;
-    border-radius: 20px;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    max-width: min(560px, 100%);
+    margin: 0 auto;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid #c9a84c;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    padding: clamp(1.25rem, 4vw, 2rem);
+    box-sizing: border-box;
+}
+
+.section-contato .contato-glass-card .text {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none;
 }
 
 .section-contato h2 {
-    font-size: 2rem;
+    font-size: clamp(1.5rem, 4vw, 2rem);
     margin-bottom: 10px;
+    color: #c9a84c;
+    font-weight: 700;
 }
 
 .section-contato p {
     margin-bottom: 10px;
-    font-size: 1rem;
-    color: #e0e0e0;
+    font-size: clamp(0.95rem, 2.8vw, 1rem);
+    color: #f0f0f0;
+    line-height: 1.5;
+}
+
+.section-contato .contato-glass-card p i {
+    color: #c9a84c;
+    margin-right: 0.35rem;
 }
 
 .section-contato a {
@@ -769,12 +804,18 @@ hr {
     font-weight: 600;
 }
 
-/* Últimos Cultos */
+/* Últimos Cultos (página Cultos): bloco centralizado na área visível */
 .ultimos-cultos {
     background-color: transparent;
     color: #fff;
-    padding: 40px 20px;
+    padding: clamp(2rem, 5vw, 3.5rem) 20px;
     text-align: center;
+    min-height: min(68vh, 760px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
 }
 
 .ultimos-cultos h2 {
@@ -987,6 +1028,157 @@ hr {
     text-align: center;
 }
 
+/* --- Painel detalhe dos ministérios (paleta marrom/dourada INVB) --- */
+.expanded-item--invb {
+    box-sizing: border-box;
+    background: linear-gradient(165deg, #3a2e22 0%, #2a2118 42%, #1c1612 100%);
+    border: 1px solid rgba(201, 168, 76, 0.5);
+    box-shadow:
+        0 10px 36px rgba(0, 0, 0, 0.38),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    color: #ebe2d6;
+    gap: clamp(1rem, 2.5vw, 1.75rem);
+    max-width: min(100%, 1100px);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.expanded-item--invb .expanded-text {
+    color: #ebe2d6;
+}
+
+.expanded-item--invb .expanded-item__figure {
+    flex: 0 1 48%;
+    max-width: 50%;
+    align-self: stretch;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 2px solid rgba(201, 168, 76, 0.42);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+    position: relative;
+}
+
+.expanded-item--invb .expanded-item__figure::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+        105deg,
+        rgba(42, 33, 24, 0.08) 0%,
+        transparent 45%,
+        rgba(26, 20, 16, 0.35) 100%
+    );
+}
+
+.expanded-item--invb .expanded-item__figure .expanded-image {
+    width: 100%;
+    height: 100%;
+    min-height: 260px;
+    max-width: none;
+    object-fit: cover;
+    border-radius: 0;
+    aspect-ratio: auto;
+}
+
+.expanded-item--invb .ministerio-expanded-title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0 0 1.15rem;
+    text-align: center;
+}
+
+.expanded-item--invb .ministerio-expanded-title__label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.74rem;
+    letter-spacing: 0.16em;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #c9a84c;
+}
+
+.expanded-item--invb .ministerio-expanded-title__name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(1.45rem, 2.8vw, 1.9rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #ffcc00;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.expanded-item--invb .expanded-text p:not(.ministerio-lead-in) {
+    color: #dfd5c8;
+    line-height: 1.72;
+}
+
+.expanded-item--invb .ministerio-lead-in {
+    margin-top: 1.1rem;
+    margin-bottom: 0.35rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.05em;
+    color: #c9a84c;
+}
+
+.expanded-item--invb .ministerio-atividades {
+    list-style: none;
+    padding: 0;
+    margin: 0.25rem 0 0;
+}
+
+.expanded-item--invb .ministerio-atividades li {
+    position: relative;
+    padding: 0.78rem 0.5rem 0.78rem 2.4rem;
+    margin: 0;
+    border-bottom: 1px solid rgba(201, 168, 76, 0.14);
+    color: #e8dfd0;
+    line-height: 1.55;
+}
+
+.expanded-item--invb .ministerio-atividades li:last-child {
+    border-bottom: 0;
+}
+
+.expanded-item--invb .ministerio-atividades li::before {
+    content: "\f00c";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    position: absolute;
+    left: 0.15rem;
+    top: 0.82rem;
+    width: 1.35rem;
+    text-align: center;
+    font-size: 0.68rem;
+    color: #c9a84c;
+    opacity: 0.95;
+}
+
+.expanded-item--invb[data-id="louvor"] .ministerio-atividades li::before {
+    content: "\f001";
+    font-size: 0.72rem;
+}
+
+.expanded-item--invb[data-id="evangelismo"] .ministerio-expanded-title__name,
+.expanded-item--invb[data-id="introducao"] .ministerio-expanded-title__name {
+    font-size: clamp(1.05rem, 2.2vw, 1.5rem);
+    line-height: 1.28;
+    max-width: min(100%, 20rem);
+}
+
+.card#evangelismo .card-name {
+    font-size: 11px;
+    letter-spacing: 0.03em;
+    line-height: 1.25;
+}
+
+/* Ministérios: card ativo some da grade enquanto o painel detalhe está aberto */
+.section-ministerios .cards-container .card.card--ministry-hidden {
+    display: none !important;
+}
+
 .hidden {
     display: none;
 }
@@ -997,18 +1189,6 @@ hr {
 
 
 /* ESTUDO */
-.section-contato {
-    justify-content: center;
-    align-items: center;
-    height: auto;
-    min-height: 75vh;
-    padding: 90px 20px;
-    transition: opacity 1s ease-out;
-    text-align: center;
-    font-family: 'Montserrat', sans-serif;
-}
-
-
 .estudos-biblicos h2 {
     padding-top: 5%;
     font-size: 36px;
@@ -1448,6 +1628,11 @@ svg {
     .cultos-mapa{
         height: auto;
         min-width: 200px;
+    }
+
+    .ultimos-cultos {
+        min-height: min(52vh, 520px);
+        padding: 1.75rem 16px;
     }
 
     .ultimos-cultos h2{
@@ -1970,6 +2155,94 @@ svg {
         padding: 16px;
     }
 
+    .expanded-item--invb .expanded-item__figure {
+        flex: 1 1 auto;
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .expanded-item--invb .expanded-item__figure .expanded-image {
+        min-height: 200px;
+        max-height: min(52vw, 320px);
+        aspect-ratio: 16 / 10;
+    }
+
+    /* Sem “zoom” no toque — evita sensação estranha no painel */
+    .expanded-item:hover {
+        transform: none;
+    }
+
+    /* Mesmo padrão INVB no mobile: tipografia, lista e áreas seguras */
+    .expanded-item--invb {
+        padding: clamp(12px, 3.2vw, 18px);
+        gap: clamp(12px, 3vw, 16px);
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+    }
+
+    .expanded-item--invb .expanded-text h2.ministerio-expanded-title {
+        font-size: inherit;
+        margin: 0 0 0.65rem;
+    }
+
+    .expanded-item--invb .ministerio-expanded-title__label {
+        font-size: clamp(0.62rem, 2.2vw, 0.72rem);
+        letter-spacing: 0.1em;
+        padding: 0 0.35rem;
+    }
+
+    .expanded-item--invb .ministerio-expanded-title__name {
+        font-size: clamp(1.12rem, 5vw, 1.62rem);
+        letter-spacing: 0.045em;
+        line-height: 1.22;
+    }
+
+    .expanded-item--invb .expanded-text p:not(.ministerio-lead-in) {
+        font-size: clamp(0.93rem, 3.3vw, 1.06rem);
+        line-height: 1.68;
+    }
+
+    .expanded-item--invb .ministerio-lead-in {
+        font-size: clamp(0.86rem, 2.8vw, 0.95rem);
+        margin-top: 0.75rem;
+    }
+
+    .expanded-item--invb .ministerio-atividades li {
+        padding: 0.9rem 0.35rem 0.9rem 2.5rem;
+        min-height: 2.75rem;
+        display: flex;
+        align-items: center;
+        font-size: clamp(0.88rem, 3vw, 1rem);
+    }
+
+    .expanded-item--invb .ministerio-atividades li::before {
+        top: 50%;
+        transform: translateY(-50%);
+        left: 0.2rem;
+    }
+
+    .expanded-item--invb[data-id="louvor"] .ministerio-atividades li::before {
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .expanded-item--invb[data-id="evangelismo"] .ministerio-expanded-title__name,
+    .expanded-item--invb[data-id="introducao"] .ministerio-expanded-title__name {
+        font-size: clamp(0.85rem, 4.5vw, 1.28rem);
+        max-width: 100%;
+        line-height: 1.25;
+    }
+
+    /* Overlay da foto coerente com coluna (imagem em cima, texto embaixo) */
+    .expanded-item--invb .expanded-item__figure::after {
+        background: linear-gradient(
+            to bottom,
+            rgba(42, 33, 24, 0.06) 0%,
+            transparent 40%,
+            rgba(26, 20, 16, 0.44) 100%
+        );
+    }
+
     /* imagem responsiva (sem height fixa) */
     .expanded-image {
         display: block;      /* necessário para margin auto funcionar em imagens */
@@ -2005,7 +2278,9 @@ svg {
 
     .section-ministerios .expanded-content {
         margin: 20px auto 0;
-        padding: 0 16px;
+        padding: 0 max(12px, env(safe-area-inset-right, 0px)) 0 max(12px, env(safe-area-inset-left, 0px));
+        max-width: 100%;
+        box-sizing: border-box;
     }
 
     .historia-container h2 {
@@ -2084,6 +2359,31 @@ svg {
 
 
 
+}
+
+/* Telas estreitas: foto um pouco mais compacta, lista confortável para o polegar */
+@media (max-width: 480px) {
+    .expanded-item--invb .expanded-item__figure .expanded-image {
+        min-height: 170px;
+        max-height: min(44vw, 248px);
+    }
+
+    .expanded-item--invb .ministerio-atividades li {
+        min-height: 3rem;
+        padding-left: 2.55rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .expanded-item,
+    .expanded-item--invb,
+    .expanded-content {
+        transition: none !important;
+    }
+
+    .expanded-item:hover {
+        transform: none !important;
+    }
 }
 
 /* Ajuste extra: evita overflow horizontal por larguras fixas */

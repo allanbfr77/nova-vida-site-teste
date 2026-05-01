@@ -31,36 +31,55 @@ document.addEventListener("DOMContentLoaded", async () => {
     const botao = document.getElementById("copiar-btn");
     if (botao) botao.addEventListener("click", copiarPix);
 
-    // Cards
-    const cards = document.querySelectorAll('.card');
+    // Cards de ministérios: ao expandir, o card some da grade até fechar o painel
+    const ministeriosSection = document.querySelector('.section-ministerios');
     const expandedContent = document.getElementById('expanded-content');
-    if (cards && expandedContent) {
-        cards.forEach((card) => {
+    const ministryCards = ministeriosSection
+        ? ministeriosSection.querySelectorAll('.cards-container .card')
+        : [];
+
+    function ministryClearHiddenCards() {
+        if (!ministeriosSection) return;
+        ministeriosSection.querySelectorAll('.cards-container .card.card--ministry-hidden').forEach((el) => {
+            el.classList.remove('card--ministry-hidden');
+        });
+    }
+
+    if (ministeriosSection && expandedContent && ministryCards.length) {
+        ministryCards.forEach((card) => {
             card.addEventListener("click", () => {
                 const id = card.id;
+                const item = ministeriosSection.querySelector(`#expanded-items .expanded-item[data-id="${id}"]`);
+                if (!item) return;
+                ministryClearHiddenCards();
                 expandedContent.innerHTML = "";
-                const item = document.querySelector(`#expanded-items .expanded-item[data-id="${id}"]`);
-                if (item) expandedContent.appendChild(item.cloneNode(true));
+                expandedContent.appendChild(item.cloneNode(true));
                 expandedContent.classList.remove("hidden");
+                card.classList.add('card--ministry-hidden');
                 expandedContent.scrollIntoView({ behavior: "smooth" });
             });
         });
         expandedContent.addEventListener('click', () => {
             expandedContent.classList.add('hidden');
             expandedContent.innerHTML = '';
+            ministryClearHiddenCards();
         });
     }
 
     // Query string ministério
     const urlParams = new URLSearchParams(window.location.search);
     const ministerioId = urlParams.get('ministerio');
-    if (ministerioId) {
-        const expandedContent = document.getElementById('expanded-content');
-        const item = document.querySelector(`#expanded-items .expanded-item[data-id="${ministerioId}"]`);
-        if (expandedContent && item) {
+    if (ministerioId && ministeriosSection && expandedContent) {
+        const item = ministeriosSection.querySelector(`#expanded-items .expanded-item[data-id="${ministerioId}"]`);
+        if (item) {
+            ministryClearHiddenCards();
             expandedContent.innerHTML = "";
             expandedContent.appendChild(item.cloneNode(true));
             expandedContent.classList.remove("hidden");
+            const cardEl = document.getElementById(ministerioId);
+            if (cardEl && ministeriosSection.querySelector('.cards-container')?.contains(cardEl)) {
+                cardEl.classList.add('card--ministry-hidden');
+            }
             expandedContent.scrollIntoView({ behavior: "smooth" });
         }
     }
@@ -298,20 +317,10 @@ async function carregarEstudosBiblicos(tema) {
 
 window.carregarEstudosBiblicos = carregarEstudosBiblicos;
 
-/** Prefixo para partials (header/footer): em *.github.io/repo/ o fetch relativo quebra sem barra final. */
-function getPagesBasePath() {
-    const { hostname, pathname } = window.location;
-    if (hostname === 'localhost' || hostname === '127.0.0.1') return '/';
-    if (hostname.endsWith('github.io')) {
-        const segments = pathname.split('/').filter(Boolean);
-        if (segments.length >= 1) return `/${segments[0]}/`;
-    }
-    return '/';
-}
-
 async function loadComponent(selector, file) {
     try {
-        const response = await fetch(`${getPagesBasePath()}${file}`);
+        // Com <base href="..."> no build do GitHub Pages, URL relativa resolve como no dev.
+        const response = await fetch(file);
         if (!response.ok) throw new Error(`Erro ao carregar ${file}`);
         const content = await response.text();
         document.querySelector(selector).innerHTML = content;
