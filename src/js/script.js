@@ -502,25 +502,39 @@ async function setupMobileMenu() {
     const menu = document.querySelector('#menu');
     if (!btn || !menu) return;
     const OPEN_CLASS = 'is-open';
+    const DESKTOP_BREAKPOINT = 1025;
+
     function openMenu() {
-        btn.classList.toggle('active');
+        btn.classList.add('active');
         menu.classList.add(OPEN_CLASS);
-        document.addEventListener('click', handleOutsideClick);
-        document.addEventListener('keydown', handleEsc, { once: true });
+        document.addEventListener('keydown', handleEsc);
+        queueMicrotask(() => {
+            document.addEventListener('click', handleOutsideClick);
+        });
     }
     function closeMenu() {
-        btn.classList.toggle('active');
+        btn.classList.remove('active');
         menu.classList.remove(OPEN_CLASS);
         document.removeEventListener('click', handleOutsideClick);
+        document.removeEventListener('keydown', handleEsc);
     }
     function toggleMenu() {
         menu.classList.contains(OPEN_CLASS) ? closeMenu() : openMenu();
     }
     function handleOutsideClick(e) {
-        if (!menu.contains(e.target) && e.target !== btn) closeMenu();
+        if (!menu.contains(e.target) && !btn.contains(e.target)) closeMenu();
     }
-    function handleEsc(e) { if (e.key === 'Escape') closeMenu(); }
-    window.addEventListener('resize', () => closeMenu());
-    menu.addEventListener('click', (e) => { if (e.target.tagName === 'A') closeMenu(); });
-    btn.addEventListener('click', (e) => { e.stopPropagation(); toggleMenu(); });
+    function handleEsc(e) {
+        if (e.key === 'Escape') closeMenu();
+    }
+    window.addEventListener('resize', () => {
+        if (window.innerWidth >= DESKTOP_BREAKPOINT) closeMenu();
+    });
+    menu.addEventListener('click', (e) => {
+        if (e.target.tagName === 'A') closeMenu();
+    });
+    btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleMenu();
+    });
 }

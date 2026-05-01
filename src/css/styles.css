@@ -57,6 +57,7 @@ header {
     align-items: center;
     z-index: 5000;
     height: 70px;
+    overflow: visible;
     transition: transform 0.3s ease-in-out;
     /* Transição suave */
 }
@@ -65,6 +66,7 @@ header {
 #header {
     position: relative;
     z-index: 6000;
+    overflow: visible;
 }
 
 .logo {
@@ -87,6 +89,7 @@ header nav {
     margin-left: 40px;
     position: relative;
     z-index: 2500;
+    overflow: visible;
 }
 
 header nav ul {
@@ -856,9 +859,11 @@ hr {
 .section-ministerios {
     background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../assets/images/image.jpg') no-repeat center center scroll;
     background-size: cover;
+    background-position: center center;
     position: relative;
     z-index: 0;
     min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     flex-direction: column;
     /* Header é absolute: reserva altura para não invadir logo/menu hambúrguer */
@@ -949,16 +954,16 @@ hr {
     hyphens: auto;
 }
 
-/* Ministérios — mobile: coluna única, cards um pouco menores */
+/* Ministérios — mobile: coluna única, texto e ícones grandes para leitura confortável */
 @media (max-width: 767px) {
     .section-ministerios .cards-container {
         grid-template-columns: 1fr;
-        max-width: min(340px, calc(100vw - 24px));
+        max-width: min(440px, calc(100vw - 24px));
         width: 100%;
         margin-left: auto;
         margin-right: auto;
         padding: 16px max(10px, env(safe-area-inset-right, 0px)) 1.25rem max(10px, env(safe-area-inset-left, 0px));
-        gap: 10px;
+        gap: 14px;
         grid-auto-rows: auto;
     }
 
@@ -969,25 +974,32 @@ hr {
         aspect-ratio: 1 / 1.06;
         align-self: start;
         justify-self: stretch;
-        padding: 12px 10px;
-        gap: 5px;
+        padding: 18px 14px;
+        gap: 10px;
     }
 
     .section-ministerios .card-icon {
-        font-size: 1.65rem;
-        margin-bottom: 2px;
+        font-size: 2.75rem;
+        margin-bottom: 4px;
     }
 
     .section-ministerios .card-label {
-        font-size: 10px;
+        font-size: 13px;
+        letter-spacing: 0.07em;
     }
 
     .section-ministerios .card-name {
-        font-size: 12px;
+        font-size: 16px;
+        letter-spacing: 0.035em;
+        line-height: 1.25;
     }
 
     .section-ministerios .card:hover {
         transform: translateY(-4px);
+    }
+
+    .card#evangelismo .card-name {
+        font-size: 14px;
     }
 }
 
@@ -1619,15 +1631,19 @@ svg {
       
     /* Só ministérios: evita segunda camada de fundo na home (efeito de “zoom” ao carregar) */
     .section-ministerios::before {
-    content: "";
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.7)),
-                url('../assets/images/image.jpg') no-repeat center center;
-    background-size: cover;
-    z-index: 0;
-    pointer-events: none;
-
+        content: "";
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        min-height: 100vh;
+        min-height: 100dvh;
+        background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.7)),
+            url('../assets/images/image.jpg') no-repeat center center;
+        background-size: cover;
+        background-position: center center;
+        z-index: 0;
+        pointer-events: none;
     }
 
     /* cards flat — sem overrides de imagem necessários */
@@ -1772,10 +1788,16 @@ svg {
         margin-top: 10px;
     }
     .section-ministerios .card-icon {
-        font-size: 1.6rem;
+        font-size: 2.6rem;
+    }
+    .section-ministerios .card-label {
+        font-size: 12px;
     }
     .section-ministerios .card-name {
-        font-size: 11px;
+        font-size: 15px;
+    }
+    .card#evangelismo .card-name {
+        font-size: 13px;
     }
     .social-icons li a {
         font-size: 17px;
@@ -1900,142 +1922,8 @@ svg {
     .navbar {
         padding: 0 5%;
     }
-    
 
-    /* Botão hamburguer maior e com área de toque amigável */
-    .navbar__toggle {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        padding: 7px;
-        font-size: 1.75rem;
-        min-width: 50px;
-        /* largura do botão */
-        min-height: 50px;
-        /* altura do botão */
-        background: none;
-        border-radius: 10px;
-        cursor: pointer;
-        margin: 0;
-    }
-
-
-
-    .navbar__toggle.active span:nth-child(1) {
-        bottom: 50%;
-        transform: translateY(12px) rotate(45deg);
-    }
-
-    .navbar__toggle.active span:nth-child(2) {
-        opacity: 0;
-        transform: rotate(45deg);
-    }
-
-    .navbar__toggle.active span:nth-child(3) {
-        bottom: 0;
-        transform: translateY(-12px) rotate(-45deg);
-    }
-
-    .navbar__toggle span {
-        display: block;
-        height: 5px;
-        /* espessura da barra */
-        width: 100%;
-        /* ocupa toda a largura do botão */
-        background: whitesmoke;
-        border-radius: 2px;
-        transition: all 0.3s ease;
-    }
-
-    /* Container do dropdown com melhor legibilidade */
-    .navbar__menu {
-        position: absolute;
-        top: calc(70px + env(safe-area-inset-top, 0px));
-        /* altura do header + notch */
-        right: 12px;
-        left: 12px;
-        display: none;
-        /* escondido por padrão */
-        flex-direction: column;
-        gap: 0;
-        background: rgba(0, 0, 0, 0.92);
-        border-radius: 12px;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, .2);
-        overflow: hidden;
-        z-index: 1000;
-        padding: 6px 0;
-        backdrop-filter: blur(6px);
-        max-height: min(70vh, 520px);
-        /* evita estourar a tela */
-        overflow-y: auto;
-        /* rolagem interna se passar */
-        scrollbar-width: thin;
-    }
-
-    /* Itens maiores, com área de toque confortável */
-    .navbar__menu li {
-        min-height: 52px;
-        display: flex;
-        align-items: stretch;
-    }
-
-    .navbar__menu a {
-        display: block;
-        width: 100%;
-        padding: 16px 18px;
-        /* mais espaço lateral/vertical */
-        font-size: 1.125rem;
-        line-height: 1.35;
-        letter-spacing: 0.2px;
-        border-bottom: 0px solid rgba(255, 255, 255, .08);
-    }
-
-    .navbar__menu a:active {
-        background: rgba(255, 255, 255, 0.08);
-    }
-
-    .navbar__menu a:last-child {
-        border-bottom: 0;
-    }
-
-    /* Submenu no mobile (em coluna) */
-    .submenu {
-        position: static;
-        display: none;
-        margin: 0;
-        padding: 6px 0;
-        background: rgba(255, 255, 255, 0.05);
-        border-top: 1px solid rgba(255, 255, 255, .08);
-        box-shadow: none;
-        border-radius: 0;
-    }
-
-    /* Use .submenu--open via JS se desejar abrir por clique */
-    .submenu.submenu--open {
-        display: block;
-    }
-
-    .menu-item:hover>.submenu {
-        display: none;
-    }
-
-    /* desativa hover no mobile */
-
-    .submenu li {
-        min-height: 48px;
-        display: flex;
-        align-items: stretch;
-    }
-
-    .submenu a {
-        padding: 14px 18px;
-        font-size: 1.05rem;
-        border-bottom: 0px dashed rgba(255, 255, 255, .08);
-    }
-
-    .submenu a:last-child {
-        border-bottom: 0;
-    }
+    /* Menu / hambúrguer: usar @media (max-width: 1024px) abaixo (evita duplicar e cortar o dropdown) */
 
     footer nav {
         display: flex;
@@ -2073,74 +1961,67 @@ svg {
         padding: 0 5%;
     }
 
-    /* Botão hamburguer maior e com área de toque amigável */
+    /* Botão hambúrguer: área de toque ampla + animação estável (translate em vez de bottom %) */
     .navbar__toggle {
         display: flex;
         flex-direction: column;
-        justify-content: space-around;
-        padding: 7px;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        gap: 7px;
+        padding: 8px;
         font-size: 1.75rem;
-        min-width: 50px;
-        /* largura do botão */
-        min-height: 50px;
-        /* altura do botão */
+        min-width: 52px;
+        min-height: 52px;
         background: none;
         border-radius: 10px;
         cursor: pointer;
         margin: 0;
     }
 
-
-
     .navbar__toggle.active span:nth-child(1) {
-        bottom: 50%;
-        transform: translateY(12px) rotate(45deg);
+        transform: translateY(calc(7px + 2.5px)) rotate(45deg);
     }
 
     .navbar__toggle.active span:nth-child(2) {
         opacity: 0;
-        transform: rotate(45deg);
+        transform: scaleX(0);
     }
 
     .navbar__toggle.active span:nth-child(3) {
-        bottom: 0;
-        transform: translateY(-12px) rotate(-45deg);
+        transform: translateY(calc(-7px - 2.5px)) rotate(-45deg);
     }
 
     .navbar__toggle span {
         display: block;
         height: 5px;
-        /* espessura da barra */
-        width: 100%;
-        /* ocupa toda a largura do botão */
+        width: 28px;
         background: whitesmoke;
         border-radius: 2px;
-        transition: all 0.3s ease;
+        transition: transform 0.25s ease, opacity 0.2s ease;
     }
 
-    /* Container do dropdown com melhor legibilidade */
+    /* Menu: fixed ao viewport — absolute + top 70px ficava relativo ao nav e cortava o painel */
     .navbar__menu {
-        position: absolute;
-        top: calc(70px + env(safe-area-inset-top, 0px));
-        /* altura do header + notch */
-        right: 12px;
-        left: 12px;
+        position: fixed;
+        left: max(12px, env(safe-area-inset-left, 0px));
+        right: max(12px, env(safe-area-inset-right, 0px));
+        top: calc(70px + env(safe-area-inset-top, 0px) + 10px);
         display: none;
-        /* escondido por padrão */
         flex-direction: column;
         gap: 0;
-        background: rgba(0, 0, 0, 0.92);
+        background: rgba(0, 0, 0, 0.94);
         border-radius: 12px;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, .2);
-        overflow: hidden;
-        z-index: 1000;
-        padding: 6px 0;
-        backdrop-filter: blur(6px);
-        max-height: min(70vh, 520px);
-        /* evita estourar a tela */
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+        z-index: 12000;
+        padding: 8px 0;
+        backdrop-filter: blur(8px);
+        -webkit-overflow-scrolling: touch;
+        overflow-x: hidden;
         overflow-y: auto;
-        /* rolagem interna se passar */
         scrollbar-width: thin;
+        max-height: calc(100vh - 70px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 28px);
+        max-height: calc(100dvh - 70px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 28px);
     }
 
     /* Itens maiores, com área de toque confortável */
@@ -2154,7 +2035,6 @@ svg {
         display: block;
         width: 100%;
         padding: 16px 18px;
-        /* mais espaço lateral/vertical */
         font-size: 1.125rem;
         line-height: 1.35;
         letter-spacing: 0.2px;
@@ -2179,6 +2059,8 @@ svg {
         border-top: 1px solid rgba(255, 255, 255, .08);
         box-shadow: none;
         border-radius: 0;
+        max-height: none;
+        overflow: visible;
     }
 
     /* Use .submenu--open via JS se desejar abrir por clique */
