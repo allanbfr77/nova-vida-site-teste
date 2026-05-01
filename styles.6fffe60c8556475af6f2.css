@@ -24,14 +24,14 @@ footer {
 }
 
 .section-index{
-    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.7)), url(/assets/images/image.7282c21ac6fe23917fc0.jpg) no-repeat center center fixed;
+    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.7)), url(assets/images/image.7282c21ac6fe23917fc0.jpg) no-repeat center center fixed;
     background-size: cover;
     background-attachment: fixed;
 }
 .section-cultos,
 .section-doe,
 .section-estudo {
-    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(/assets/images/image.7282c21ac6fe23917fc0.jpg) no-repeat center center fixed;
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(assets/images/image.7282c21ac6fe23917fc0.jpg) no-repeat center center fixed;
     background-size: cover;
     background-attachment: fixed;
 }
@@ -503,7 +503,7 @@ nav ul li a:hover {
 
 /* Seção Contato */
 .section-contato {
-    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(/assets/images/image.7282c21ac6fe23917fc0.jpg) no-repeat center center fixed;
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(assets/images/image.7282c21ac6fe23917fc0.jpg) no-repeat center center fixed;
     background-size: cover;
     background-attachment: fixed;
     display: flex;
@@ -848,7 +848,7 @@ hr {
 /* MINISTÉRIOS */
 
 .section-ministerios {
-    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(/assets/images/image.7282c21ac6fe23917fc0.jpg) no-repeat center center fixed;
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(assets/images/image.7282c21ac6fe23917fc0.jpg) no-repeat center center fixed;
     background-size: cover;
     background-attachment: fixed;
     position: relative;
@@ -882,7 +882,7 @@ hr {
     flex-shrink: 0;
 }
 
-.card {
+.section-ministerios .cards-container .card {
     width: 100%;
     min-width: 0;
     min-height: 0;
@@ -890,22 +890,24 @@ hr {
     height: auto;
     border-radius: 10px;
     border: 1px solid #c9a84c;
-    background: #2a2118;
+    background: rgba(42, 33, 24, 0.62);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     cursor: pointer;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 6px;
-    transition: all 0.2s ease;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
     flex-shrink: 1;
 }
 
-.card:hover {
+.section-ministerios .cards-container .card:hover {
     border-color: #e8c96a;
-    background: #332819;
+    background: rgba(51, 40, 25, 0.78);
     transform: translateY(-8px);
-    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.45);
 }
 
 .card-icon {
@@ -1462,7 +1464,7 @@ hr {
     height: 200px;
     margin: 20px auto 0;
     border-radius: 8px;
-    background-image: url(/assets/images/qrcode_pix.c8c9f231534cfd1b605d.png);
+    background-image: url(assets/images/qrcode_pix.c8c9f231534cfd1b605d.png);
     /* caminho relativo da imagem */
     background-size: cover;
     background-position: center;
@@ -1551,7 +1553,7 @@ svg {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
     background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.7)),
-                url(/assets/images/image.7282c21ac6fe23917fc0.jpg) no-repeat center center;
+                url(assets/images/image.7282c21ac6fe23917fc0.jpg) no-repeat center center;
     background-size: cover;
     z-index: -1;
 
@@ -2414,4 +2416,4 @@ svg {
 
 
 
-/*# sourceMappingURL=styles.4865d4aabaa1240649e8.css.map*/
+/*# sourceMappingURL=styles.6fffe60c8556475af6f2.css.map*/
