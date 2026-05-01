@@ -31,8 +31,11 @@ function generateHtmlPlugins(isProduction) {
   });
 }
 
-module.exports = (env, argv) => {
+module.exports = (env = {}, argv) => {
   const isProduction = argv.mode === 'production';
+  /** GitHub Pages (projeto): site fica em /nome-do-repo/ — assets precisam desse prefixo */
+  const useGithubPagesBase = isProduction && Boolean(env.githubPages);
+  const publicPath = useGithubPagesBase ? '/nova-vida-site-teste/' : '/';
 
   return {
     // Entrada principal do app
@@ -44,7 +47,7 @@ module.exports = (env, argv) => {
       chunkFilename: isProduction ? '[name].[contenthash].js' : '[name].js',
       path: path.resolve(__dirname, 'dist'),
       clean: true,
-      publicPath: '/',
+      publicPath,
       assetModuleFilename: 'assets/[name].[contenthash][ext][query]',
     },
 
