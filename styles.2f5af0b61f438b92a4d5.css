@@ -29,9 +29,9 @@ footer {
         linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.7)),
         url(assets/images/image.7282c21ac6fe23917fc0.jpg);
     background-repeat: no-repeat, no-repeat;
-    background-position: center center, center top;
-    background-size: 100% 100%, 100% auto;
-    background-attachment: scroll, scroll;
+    background-position: center center, center center;
+    background-size: 100% 100%, cover;
+    background-attachment: scroll, fixed;
     min-height: 100vh;
     min-height: 100svh;
     min-height: 100dvh;
@@ -48,7 +48,7 @@ header {
     color: whitesmoke;
     padding: 15px 0;
     margin: 0;
-    position: absolute;
+    position: fixed;
     width: 100%;
     top: 0;
     left: 0;
@@ -58,8 +58,13 @@ header {
     z-index: 5000;
     height: 70px;
     overflow: visible;
-    transition: transform 0.3s ease-in-out;
-    /* Transição suave */
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+}
+
+/* Header some ao rolar para baixo (JS adiciona esta classe) */
+header.header--hidden {
+    transform: translateY(-100%);
 }
 
 /* Wrapper do header injetado: empilha acima do conteúdo (evita cards por cima da logo/menu) */
@@ -167,17 +172,14 @@ nav ul li a:hover {
 .section-home {
     display: flex;
     justify-content: center;
-    /* Alinha o conteúdo horizontalmente */
     align-items: center;
-    /* Alinha o conteúdo verticalmente */
-    height: 100vh;
-    /* Ocupa toda a altura da tela */
-    /*height: calc(100vh - 70px); /* Compensa a altura do header fixo */
+    min-height: 100vh;
+    min-height: 100dvh;
+    box-sizing: border-box;
     color: whitesmoke;
     background: rgba(0, 0, 0, 0.5);
     transition: opacity 1s ease-out;
     text-align: center;
-    /* Centraliza o texto */
 }
 
 .section-home .text {
@@ -219,10 +221,22 @@ nav ul li a:hover {
 }
 
 .section-cultos-unificada {
-    padding: 20px 5vw 40px;
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 5vw 24px;
     background: transparent;
     font-family: 'Montserrat', sans-serif;
     color: #f0f0f0;
+    box-sizing: border-box;
+}
+
+/* Na página de cultos, o calendário não precisa de 100vh */
+.section-cultos .section-cultos-unificada {
+    height: auto;
+    min-height: 0;
+    padding: 0 5vw 24px;
 }
 
 .cultos-eventos-container {
@@ -233,21 +247,25 @@ nav ul li a:hover {
     flex-wrap: nowrap;
     max-width: 1600px;
     margin: 0 auto;
+    /* cresce para preencher toda a altura disponível da seção */
+    flex: 1 1 0;
+    min-height: 0;
+    width: 100%;
 }
 
 /* BLOCO: Cultos + Mapa */
 .cultos-box {
-    width: calc(50% - 20px);
-    flex: 0 0 calc(50% - 20px);
+    flex: 1 1 0;
+    min-width: 260px;
+    min-height: 0;
     display: flex;
     flex-direction: column;
-    min-width: 260px;
-    background: rgba(0, 0, 0, 0.55);
+    background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid #c9a84c;
-    border-radius: 16px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
     padding: 8px 0 0 0;
     overflow: hidden;
 }
@@ -315,27 +333,25 @@ nav ul li a:hover {
 /* Mapa */
 .cultos-mapa {
     width: 100%;
-    flex: 1;
+    flex: 1 1 0;
     min-height: 0;
-    padding: 0 12px 12px;
+    padding: 0 0 0 0;
     box-sizing: border-box;
     display: flex;
     align-items: stretch;
 }
 
 .cultos-mapa iframe {
-    flex: 1;
+    flex: 1 1 0;
     width: 100%;
-    min-height: 280px;
+    height: 100%;
+    min-height: 0;
     border: none;
-    border-radius: 0;
+    border-radius: 8px;
     display: block;
-    filter: invert(90%) hue-rotate(180deg) saturate(0.8) brightness(0.9);
+    filter: invert(0.9) hue-rotate(180deg) saturate(0.75) brightness(0.88);
 }
 
-.cultos-mapa iframe:hover {
-    transform: scale(1.03);
-}
 
 
 /* BLOCO: Eventos */
@@ -348,15 +364,15 @@ nav ul li a:hover {
 }
 
 .eventos-box {
-    width: calc(50% - 20px);
-    flex: 0 0 calc(50% - 20px);
+    flex: 1 1 0;
     min-width: 260px;
-    background: rgba(0, 0, 0, 0.55);
+    min-height: 0;
+    background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid #c9a84c;
-    border-radius: 16px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
     padding: 8px 0 0 0;
     overflow: hidden;
     display: flex;
@@ -422,10 +438,10 @@ nav ul li a:hover {
 #calendar-container {
     overflow: hidden;
     position: relative;
-    padding: 0 12px 12px;
+    padding: 0;
     box-sizing: border-box;
     width: 100%;
-    flex: 1;
+    flex: 1 1 0;
     min-height: 0;
     display: flex;
     flex-direction: column;
@@ -433,12 +449,12 @@ nav ul li a:hover {
 
 #calendar-container iframe {
     width: 100%;
-    flex: 1;
-    min-height: 280px;
+    flex: 1 1 0;
+    height: 100%;
+    min-height: 0;
     display: block;
     border-radius: 8px;
-    filter: invert(0.88) hue-rotate(180deg);
-    opacity: 0.92;
+    filter: invert(0.9) hue-rotate(180deg) saturate(0.75) brightness(0.88);
 }
 
 .cultos-info h2 i,
@@ -461,8 +477,8 @@ nav ul li a:hover {
     border-radius: 20px;
     background: rgba(255, 255, 255, 0.1);
     /* centro transparente */
-    border: 1px solid #c9a84c;
-    /* borda dourada */
+    border: 3px solid #ffffff;
+    /* bordas brancas sólidas */
     backdrop-filter: blur(12px);
     /* efeito vidro fosco */
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
@@ -819,7 +835,6 @@ hr {
     color: #fff;
     padding: clamp(2rem, 5vw, 3.5rem) 20px;
     text-align: center;
-    min-height: min(68vh, 760px);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -837,14 +852,16 @@ hr {
 
 .videos-container {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: center;
     gap: 20px;
+    width: 100%;
+    max-width: 1400px;
 }
 
 .videos-container iframe {
-    width: 100%;
-    max-width: 400px;
+    flex: 1 1 0;
+    min-width: 0;
     height: 215px;
     border: none;
     border-radius: 8px;
@@ -857,9 +874,8 @@ hr {
 /* MINISTÉRIOS */
 
 .section-ministerios {
-    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(assets/images/image.7282c21ac6fe23917fc0.jpg) no-repeat center center scroll;
-    background-size: cover;
-    background-position: center center;
+    /* Fundo escuro como fallback; a imagem vem do ::before (evita renderização dupla) */
+    background: #14110e;
     position: relative;
     z-index: 0;
     min-height: 100vh;
@@ -868,6 +884,21 @@ hr {
     flex-direction: column;
     /* Header é absolute: reserva altura para não invadir logo/menu hambúrguer */
     padding-top: calc(70px + env(safe-area-inset-top, 0px) + 16px);
+}
+
+/* Camada de imagem de fundo: fixed no desktop (parallax) → absolute no mobile (rola com a seção) */
+.section-ministerios::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background:
+        linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.72)),
+        url(assets/images/image.7282c21ac6fe23917fc0.jpg) no-repeat center center;
+    background-size: cover;
+    z-index: 0;
+    pointer-events: none;
 }
 
 /* Rodapé no fluxo normal — evita sobrepor os cards (position absolute tirava altura do fluxo) */
@@ -928,7 +959,7 @@ hr {
     justify-content: center;
     gap: 10px;
     padding: 24px;
-    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
     flex-shrink: 1;
 }
 
@@ -959,9 +990,8 @@ hr {
 
 .section-ministerios .cards-container .card:hover {
     border-color: #e8c96a;
-    background: rgba(51, 40, 25, 0.78);
-    transform: translateY(-8px);
-    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.45);
+    background: rgba(201, 168, 76, 0.18);
+    box-shadow: 0 0 0 2px rgba(201, 168, 76, 0.35), 0 8px 24px rgba(0, 0, 0, 0.35);
 }
 
 .card-icon {
@@ -1044,7 +1074,9 @@ hr {
     }
 
     .section-ministerios .cards-container .card:hover {
-        transform: translateY(-4px);
+        border-color: #e8c96a;
+        background: rgba(201, 168, 76, 0.18);
+        box-shadow: 0 0 0 2px rgba(201, 168, 76, 0.35), 0 8px 24px rgba(0, 0, 0, 0.35);
     }
 
     .section-ministerios .cards-container .card#evangelismo .card-name {
@@ -1068,7 +1100,7 @@ hr {
 }
 
 .section-ministerios .expanded-content {
-    margin-top: 24px;
+    margin-top: 0;
 }
 
 /* Painel expandido acima da camada ::before da seção */
@@ -1077,25 +1109,25 @@ hr {
     z-index: 2;
 }
 
-/*
- * Painel expandido (≥768px): mesma caixa horizontal de .cards-container (Louvor … Mulheres).
- */
-@media (min-width: 768px) {
-    .section-ministerios #expanded-content:not(.hidden) {
-        max-width: 1780px;
-        width: 100%;
-        margin-left: auto;
-        margin-right: auto;
-        padding-left: clamp(20px, 4vw, 48px);
-        padding-right: clamp(20px, 4vw, 48px);
-        box-sizing: border-box;
-    }
+/* Quando ativo, ocupa toda a altura visível abaixo do header */
+.section-ministerios #expanded-content:not(.hidden) {
+    min-height: calc(100vh - 70px - env(safe-area-inset-top, 0px) - 16px);
+    min-height: calc(100dvh - 70px - env(safe-area-inset-top, 0px) - 16px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 24px clamp(20px, 4vw, 48px);
+    box-sizing: border-box;
+    max-width: 1780px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
 
-    .section-ministerios #expanded-content:not(.hidden) .expanded-item--invb {
-        max-width: 100%;
-        margin-left: 0;
-        margin-right: 0;
-    }
+.section-ministerios #expanded-content:not(.hidden) .expanded-item--invb {
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
 }
 
 .expanded-container {
@@ -1234,7 +1266,7 @@ hr {
 
 .expanded-item--invb .ministerio-expanded-title__label {
     font-family: 'Montserrat', sans-serif;
-    font-size: 0.74rem;
+    font-size: clamp(0.8rem, 1vw, 0.95rem);
     letter-spacing: 0.16em;
     font-weight: 600;
     text-transform: uppercase;
@@ -1243,7 +1275,7 @@ hr {
 
 .expanded-item--invb .ministerio-expanded-title__name {
     font-family: 'Montserrat', sans-serif;
-    font-size: clamp(1.45rem, 2.8vw, 1.9rem);
+    font-size: clamp(1.7rem, 3.2vw, 2.4rem);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.07em;
@@ -1253,14 +1285,15 @@ hr {
 
 .expanded-item--invb .expanded-text p:not(.ministerio-lead-in) {
     color: #dfd5c8;
-    line-height: 1.72;
+    font-size: clamp(1rem, 1.2vw, 1.2rem);
+    line-height: 1.78;
 }
 
 .expanded-item--invb .ministerio-lead-in {
     margin-top: 1.1rem;
     margin-bottom: 0.35rem;
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: clamp(1rem, 1.15vw, 1.15rem);
     letter-spacing: 0.05em;
     color: #c9a84c;
 }
@@ -1273,11 +1306,12 @@ hr {
 
 .expanded-item--invb .ministerio-atividades li {
     position: relative;
-    padding: 0.78rem 0.5rem 0.78rem 2.4rem;
+    padding: 0.82rem 0.5rem 0.82rem 2.4rem;
     margin: 0;
     border-bottom: 1px solid rgba(201, 168, 76, 0.14);
     color: #e8dfd0;
-    line-height: 1.55;
+    font-size: clamp(0.95rem, 1.1vw, 1.1rem);
+    line-height: 1.6;
 }
 
 .expanded-item--invb .ministerio-atividades li:last-child {
@@ -1305,9 +1339,9 @@ hr {
 
 .expanded-item--invb[data-id="evangelismo"] .ministerio-expanded-title__name,
 .expanded-item--invb[data-id="introducao"] .ministerio-expanded-title__name {
-    font-size: clamp(1.05rem, 2.2vw, 1.5rem);
+    font-size: clamp(1.3rem, 2.5vw, 1.9rem);
     line-height: 1.28;
-    max-width: min(100%, 20rem);
+    max-width: min(100%, 24rem);
 }
 
 .card#evangelismo .card-name {
@@ -1681,32 +1715,21 @@ svg {
         z-index: 1;
     }
 
-    /* z-index 0: evita empilhar acima do header/submenu (home mantém z-index 1 para o fundo) */
+    /* z-index 0: evita empilhar acima do header/submenu */
     .section-ministerios {
         position: relative;
         z-index: 0;
     }
-      
-    /*
-     * Camada de fundo só dentro da seção (absolute).
-     * fixed fazia o overlay cobrir o viewport inteiro: ao rolar no mobile o footer passava “por baixo” e sumia.
-     */
-    .section-ministerios::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        min-height: 100%;
-        background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.7)),
-            url(assets/images/image.7282c21ac6fe23917fc0.jpg) no-repeat center center;
-        background-size: cover;
-        background-position: center center;
-        z-index: 0;
-        pointer-events: none;
-    }
-
-    /* cards flat — sem overrides de imagem necessários */
 }
-/*  */
+
+/* Mobile: ::before passa de fixed para absolute — fundo rola com a secao, rodape nao some */
+@media (max-width: 768px) {
+    .section-ministerios::before {
+        position: absolute;
+        height: 100%;
+        min-height: 100%;
+    }
+}
 
 
 @media (max-width: 540px) {
@@ -2464,4 +2487,4 @@ svg {
 
 
 
-/*# sourceMappingURL=styles.9e2d5b27b627deefe80f.css.map*/
+/*# sourceMappingURL=styles.2f5af0b61f438b92a4d5.css.map*/
