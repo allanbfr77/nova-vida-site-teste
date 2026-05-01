@@ -298,9 +298,20 @@ async function carregarEstudosBiblicos(tema) {
 
 window.carregarEstudosBiblicos = carregarEstudosBiblicos;
 
+/** Prefixo para partials (header/footer): em *.github.io/repo/ o fetch relativo quebra sem barra final. */
+function getPagesBasePath() {
+    const { hostname, pathname } = window.location;
+    if (hostname === 'localhost' || hostname === '127.0.0.1') return '/';
+    if (hostname.endsWith('github.io')) {
+        const segments = pathname.split('/').filter(Boolean);
+        if (segments.length >= 1) return `/${segments[0]}/`;
+    }
+    return '/';
+}
+
 async function loadComponent(selector, file) {
     try {
-        const response = await fetch(file);
+        const response = await fetch(`${getPagesBasePath()}${file}`);
         if (!response.ok) throw new Error(`Erro ao carregar ${file}`);
         const content = await response.text();
         document.querySelector(selector).innerHTML = content;
