@@ -6,14 +6,19 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     await loadComponent("#footer", "footer.html");
 
-    // Fade
+    // Fade das seções + hide/show do header ao rolar
+    let lastScrollY = window.scrollY;
+    const headerEl = document.querySelector('header');
+
     window.addEventListener('scroll', function () {
+        const currentScrollY = window.scrollY;
+
+        // Fade das seções (só na home)
         const homeSection = document.querySelector('.section-home');
         const eventosCultosSection = document.querySelector('.section-cultos-unificada');
         const historiaSection = document.querySelector('.section-historia');
-
         if (homeSection && eventosCultosSection && historiaSection) {
-            if (window.scrollY > 100) {
+            if (currentScrollY > 100) {
                 homeSection.classList.add('fade-out');
                 eventosCultosSection.style.opacity = 1;
                 historiaSection.style.opacity = 1;
@@ -23,7 +28,18 @@ document.addEventListener("DOMContentLoaded", async () => {
                 historiaSection.style.opacity = 0;
             }
         }
-    });
+
+        // Header visível só no topo; some ao rolar para baixo e não volta até retornar ao topo
+        if (headerEl) {
+            if (currentScrollY < 60) {
+                headerEl.classList.remove('header--hidden');
+            } else {
+                headerEl.classList.add('header--hidden');
+            }
+        }
+
+        lastScrollY = currentScrollY;
+    }, { passive: true });
 
     
 
@@ -56,7 +72,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 expandedContent.appendChild(item.cloneNode(true));
                 expandedContent.classList.remove("hidden");
                 card.classList.add('card--ministry-hidden');
-                expandedContent.scrollIntoView({ behavior: "smooth" });
+                window.scrollTo({ top: ministeriosSection.offsetTop, behavior: "smooth" });
             });
         });
         expandedContent.addEventListener('click', () => {
@@ -80,7 +96,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (cardEl && ministeriosSection.querySelector('.cards-container')?.contains(cardEl)) {
                 cardEl.classList.add('card--ministry-hidden');
             }
-            expandedContent.scrollIntoView({ behavior: "smooth" });
+            window.scrollTo({ top: ministeriosSection.offsetTop, behavior: "smooth" });
         }
     }
 
