@@ -890,8 +890,9 @@ hr {
 .section-ministerios .cards-container .card {
     width: 100%;
     min-width: 0;
-    min-height: 0;
-    aspect-ratio: 1 / 1;
+    box-sizing: border-box;
+    /* Levemente mais alto que largo: cabe título em 2 linhas sem “apertar” o quadrado */
+    aspect-ratio: 1 / 1.08;
     height: auto;
     border-radius: 10px;
     border: 1px solid #c9a84c;
@@ -904,6 +905,7 @@ hr {
     align-items: center;
     justify-content: center;
     gap: 6px;
+    padding: 10px 8px;
     transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
     flex-shrink: 1;
 }
@@ -934,13 +936,17 @@ hr {
 
 .card-name {
     font-family: 'Montserrat', sans-serif;
-    font-size: 14px;
+    font-size: clamp(11px, 1.15vw, 14px);
     font-weight: 600;
     text-transform: uppercase;
     color: #ffffff;
     text-align: center;
     letter-spacing: 0.04em;
-    line-height: 1.2;
+    line-height: 1.22;
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
 }
 
 /* Ministérios — mobile: coluna única, cards um pouco menores */
@@ -960,12 +966,11 @@ hr {
         width: 100%;
         max-width: none;
         height: auto;
-        min-height: 0;
-        aspect-ratio: 1 / 1;
+        aspect-ratio: 1 / 1.06;
         align-self: start;
         justify-self: stretch;
-        padding: 10px 8px;
-        gap: 4px;
+        padding: 12px 10px;
+        gap: 5px;
     }
 
     .section-ministerios .card-icon {
@@ -1007,6 +1012,27 @@ hr {
 .section-ministerios #expanded-content {
     position: relative;
     z-index: 2;
+}
+
+/*
+ * Painel expandido (≥768px): mesma caixa horizontal de .cards-container (Louvor … Mulheres).
+ */
+@media (min-width: 768px) {
+    .section-ministerios #expanded-content:not(.hidden) {
+        max-width: 1600px;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: clamp(20px, 4vw, 48px);
+        padding-right: clamp(20px, 4vw, 48px);
+        box-sizing: border-box;
+    }
+
+    .section-ministerios #expanded-content:not(.hidden) .expanded-item--invb {
+        max-width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
 }
 
 .expanded-container {
@@ -1056,8 +1082,8 @@ hr {
         0 10px 36px rgba(0, 0, 0, 0.38),
         inset 0 1px 0 rgba(255, 255, 255, 0.05);
     color: #ebe2d6;
-    gap: clamp(1rem, 2.5vw, 1.75rem);
-    max-width: min(100%, 1100px);
+    gap: clamp(1.25rem, 3vw, 2rem);
+    max-width: 100%;
     margin-left: auto;
     margin-right: auto;
 }
@@ -1066,72 +1092,65 @@ hr {
     color: #ebe2d6;
 }
 
+/* Área da foto: mesma coluna para todos; altura segue o bloco de texto; imagem sempre inteira (contain) */
 .expanded-item--invb .expanded-item__figure {
-    flex: 0 1 48%;
+    flex: 0 1 46%;
     max-width: 50%;
+    min-width: min(220px, 42vw);
     align-self: stretch;
-    border-radius: 14px;
-    overflow: hidden;
-    border: 2px solid rgba(201, 168, 76, 0.42);
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
     position: relative;
-}
-
-.expanded-item--invb .expanded-item__figure:not(.expanded-item__figure--icon)::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: linear-gradient(
-        105deg,
-        rgba(42, 33, 24, 0.08) 0%,
-        transparent 45%,
-        rgba(26, 20, 16, 0.35) 100%
-    );
-}
-
-.expanded-item--invb .expanded-item__figure--icon {
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    background: transparent;
+    overflow: visible;
     display: flex;
     align-items: center;
     justify-content: center;
-    /* Mesmo “bloco” da foto antiga: metade da linha, altura mínima 260px, estica com o texto */
-    flex: 0 1 48%;
-    max-width: 50%;
-    width: 100%;
-    align-self: stretch;
-    min-height: 260px;
-    min-width: 0;
-    aspect-ratio: auto;
-    background: linear-gradient(145deg, rgba(50, 40, 28, 0.95) 0%, rgba(28, 22, 18, 0.85) 100%);
+    padding: 10px clamp(12px, 2.5vw, 24px) 10px 8px;
+    min-height: min(300px, 40vh);
 }
 
-.expanded-item--invb .expanded-item__figure--icon::after {
+.expanded-item--invb .expanded-item__figure::after {
     display: none;
 }
 
-.expanded-item__icon {
-    font-size: clamp(4.25rem, min(22vw, 20vmin), 7.5rem);
-    line-height: 1;
-    color: #c9a84c;
+.expanded-item--invb .expanded-item__figure::before {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: calc(100% - 16px);
+    min-height: 300px;
+    max-height: min(92%, 500px);
+    border-radius: 2px;
+    background: linear-gradient(
+        180deg,
+        rgba(245, 230, 168, 0.45) 0%,
+        #e8c96a 8%,
+        #f5e6a8 50%,
+        #e8c96a 92%,
+        rgba(245, 230, 168, 0.45) 100%
+    );
+    pointer-events: none;
+    z-index: 2;
 }
 
-/* Louvor: foto no painel (demais ministérios seguem com ícone) */
-.expanded-item--invb .expanded-item__figure--photo {
-    display: block;
-    padding: 0;
-    background: none;
-}
-
-.expanded-item--invb .expanded-item__figure--photo .expanded-image {
-    width: 100%;
-    height: 100%;
-    min-height: 260px;
-    max-width: none;
-    object-fit: cover;
-    object-position: center;
+.expanded-item--invb .expanded-item__figure .expanded-image {
+    border: none;
+    outline: none;
+    box-shadow: none;
     border-radius: 0;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    min-height: 0;
+    object-fit: contain;
+    object-position: center center;
     display: block;
-    aspect-ratio: auto;
 }
 
 .expanded-item--invb .ministerio-expanded-title {
@@ -1222,9 +1241,9 @@ hr {
 }
 
 .card#evangelismo .card-name {
-    font-size: 11px;
+    font-size: clamp(10px, 1.05vw, 12px);
     letter-spacing: 0.03em;
-    line-height: 1.25;
+    line-height: 1.2;
 }
 
 /* Ministérios: card ativo some da grade enquanto o painel detalhe está aberto */
@@ -2201,34 +2220,56 @@ svg {
         flex: 1 1 auto;
         max-width: 100%;
         width: 100%;
-    }
-
-    .expanded-item--invb .expanded-item__figure--icon {
-        width: 100%;
-        max-width: 100%;
         align-self: stretch;
-        min-height: 200px;
-        max-height: min(52vw, 320px);
-        aspect-ratio: 16 / 10;
+        min-height: min(240px, 42vh);
+        max-height: none;
+        aspect-ratio: auto;
+        border: none;
+        box-shadow: none;
+        border-radius: 0;
+        background: transparent;
+        overflow: visible;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 16px 18px;
     }
 
-    .expanded-item--invb .expanded-item__figure--icon .expanded-item__icon {
-        font-size: clamp(3.75rem, 22vw, 6.5rem);
+    .expanded-item--invb .expanded-item__figure::after {
+        display: none;
     }
 
-    .expanded-item--invb .expanded-item__figure--photo {
-        min-height: 200px;
-        max-height: min(52vw, 320px);
-        aspect-ratio: 16 / 10;
-    }
-
-    .expanded-item--invb .expanded-item__figure--photo .expanded-image {
-        min-height: 200px;
-        max-height: min(52vw, 320px);
-        aspect-ratio: 16 / 10;
-        width: 100%;
+    .expanded-item--invb .expanded-item__figure .expanded-image {
+        width: auto;
         height: auto;
-        object-fit: cover;
+        min-height: 0;
+        max-width: 100%;
+        max-height: min(260px, 52vh);
+        aspect-ratio: auto;
+        object-fit: contain;
+        object-position: center;
+    }
+
+    /* Coluna: traço horizontal sob a foto (todos os ministérios) */
+    .expanded-item--invb .expanded-item__figure::before {
+        right: auto;
+        left: 50%;
+        top: auto;
+        bottom: 4px;
+        transform: translateX(-50%);
+        width: min(92%, 320px);
+        height: 3px;
+        min-height: 0;
+        max-height: none;
+        border-radius: 2px;
+        background: linear-gradient(
+            90deg,
+            rgba(245, 230, 168, 0.35) 0%,
+            #e8c96a 12%,
+            #f5e6a8 50%,
+            #e8c96a 88%,
+            rgba(245, 230, 168, 0.35) 100%
+        );
     }
 
     /* Sem “zoom” no toque — evita sensação estranha no painel */
@@ -2295,16 +2336,6 @@ svg {
         font-size: clamp(0.85rem, 4.5vw, 1.28rem);
         max-width: 100%;
         line-height: 1.25;
-    }
-
-    /* Overlay em figure com foto (não ícone) */
-    .expanded-item--invb .expanded-item__figure:not(.expanded-item__figure--icon)::after {
-        background: linear-gradient(
-            to bottom,
-            rgba(42, 33, 24, 0.06) 0%,
-            transparent 40%,
-            rgba(26, 20, 16, 0.44) 100%
-        );
     }
 
     /* texto abaixo da imagem com boa leitura */
@@ -2419,27 +2450,19 @@ svg {
 
 }
 
-/* Telas estreitas: mesma escala da foto antiga (170px / max 44vw) */
+/* Mobile estreito: mesma faixa para todos; Comunicações com contain */
 @media (max-width: 480px) {
-    .expanded-item--invb .expanded-item__figure--icon {
-        min-height: 170px;
-        max-height: min(44vw, 248px);
-        aspect-ratio: 16 / 10;
+    .expanded-item--invb .expanded-item__figure {
+        aspect-ratio: auto;
+        max-height: none;
     }
 
-    .expanded-item--invb .expanded-item__figure--icon .expanded-item__icon {
-        font-size: clamp(3.25rem, 20vw, 5.5rem);
-    }
-
-    .expanded-item--invb .expanded-item__figure--photo {
-        min-height: 170px;
-        max-height: min(44vw, 248px);
-        aspect-ratio: 16 / 10;
-    }
-
-    .expanded-item--invb .expanded-item__figure--photo .expanded-image {
-        min-height: 170px;
-        max-height: min(44vw, 248px);
+    .expanded-item--invb .expanded-item__figure .expanded-image {
+        aspect-ratio: auto;
+        min-height: 0;
+        max-width: 100%;
+        max-height: min(200px, 48vw);
+        object-fit: contain;
     }
 
     .expanded-item--invb .ministerio-atividades li {
