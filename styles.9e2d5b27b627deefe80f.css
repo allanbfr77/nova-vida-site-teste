@@ -872,10 +872,18 @@ hr {
 
 /* Rodapé no fluxo normal — evita sobrepor os cards (position absolute tirava altura do fluxo) */
 .section-ministerios #footer {
-    position: static;
+    position: relative;
+    z-index: 1;
     width: 100%;
     flex-shrink: 0;
     margin-top: auto;
+}
+
+/* Conteúdo acima da camada decorativa ::before (scroll no mobile não esconde o rodapé) */
+.section-ministerios .cards-container,
+.section-ministerios #expanded-items {
+    position: relative;
+    z-index: 1;
 }
 
 /* 9 cards: 5 + 4 — max-width maior para cards no tamanho próximo ao grid 3×3 antigo */
@@ -1063,7 +1071,7 @@ hr {
     margin-top: 24px;
 }
 
-/* Empilha o painel acima do ::before fixo da seção (≤1440px) */
+/* Painel expandido acima da camada ::before da seção */
 .section-ministerios #expanded-content {
     position: relative;
     z-index: 2;
@@ -1679,15 +1687,15 @@ svg {
         z-index: 0;
     }
       
-    /* Só ministérios: evita segunda camada de fundo na home (efeito de “zoom” ao carregar) */
+    /*
+     * Camada de fundo só dentro da seção (absolute).
+     * fixed fazia o overlay cobrir o viewport inteiro: ao rolar no mobile o footer passava “por baixo” e sumia.
+     */
     .section-ministerios::before {
         content: "";
-        position: fixed;
+        position: absolute;
         inset: 0;
-        width: 100%;
-        height: 100%;
-        min-height: 100vh;
-        min-height: 100dvh;
+        min-height: 100%;
         background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.7)),
             url(assets/images/image.7282c21ac6fe23917fc0.jpg) no-repeat center center;
         background-size: cover;
@@ -2011,26 +2019,32 @@ svg {
         padding: 0 5%;
     }
 
-    /* Botão hambúrguer: área de toque ampla + animação estável (translate em vez de bottom %) */
+    /*
+     * Hambúrguer → X: deslocamento = altura da barra + gap até o centro da barra do meio.
+     * (Antes usava 7px + metade da barra no lugar errado e o X ficava descentrado.)
+     */
     .navbar__toggle {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         position: relative;
-        gap: 7px;
+        --toggle-bar-h: 5px;
+        --toggle-gap: 7px;
+        gap: var(--toggle-gap);
         padding: 8px;
         font-size: 1.75rem;
         min-width: 52px;
         min-height: 52px;
         background: none;
+        border: 1px solid transparent;
         border-radius: 10px;
         cursor: pointer;
         margin: 0;
     }
 
     .navbar__toggle.active span:nth-child(1) {
-        transform: translateY(calc(7px + 2.5px)) rotate(45deg);
+        transform: translateY(calc(var(--toggle-bar-h) + var(--toggle-gap))) rotate(45deg);
     }
 
     .navbar__toggle.active span:nth-child(2) {
@@ -2039,16 +2053,23 @@ svg {
     }
 
     .navbar__toggle.active span:nth-child(3) {
-        transform: translateY(calc(-7px - 2.5px)) rotate(-45deg);
+        transform: translateY(calc(-1 * (var(--toggle-bar-h) + var(--toggle-gap)))) rotate(-45deg);
     }
 
     .navbar__toggle span {
         display: block;
-        height: 5px;
-        width: 28px;
+        flex-shrink: 0;
+        height: var(--toggle-bar-h);
+        width: 26px;
         background: whitesmoke;
         border-radius: 2px;
+        transform-origin: center center;
         transition: transform 0.25s ease, opacity 0.2s ease;
+    }
+
+    .navbar__toggle.active {
+        border-color: rgba(255, 255, 255, 0.4);
+        background: rgba(0, 0, 0, 0.35);
     }
 
     /* Menu: fixed ao viewport — absolute + top 70px ficava relativo ao nav e cortava o painel */
@@ -2443,4 +2464,4 @@ svg {
 
 
 
-/*# sourceMappingURL=styles.0a948ec9a29c7a954645.css.map*/
+/*# sourceMappingURL=styles.9e2d5b27b627deefe80f.css.map*/
