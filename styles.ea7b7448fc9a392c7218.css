@@ -24,14 +24,14 @@ footer {
 }
 
 .section-index{
-    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.7)), url(/assets/images/image.7282c21ac6fe23917fc0.jpg) no-repeat center center fixed;
+    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.7)), url(/nova-vida-site-teste/assets/images/image.7282c21ac6fe23917fc0.jpg) no-repeat center center fixed;
     background-size: cover;
     background-attachment: fixed;
 }
 .section-cultos,
 .section-doe,
 .section-estudo {
-    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(/assets/images/image.7282c21ac6fe23917fc0.jpg) no-repeat center center fixed;
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(/nova-vida-site-teste/assets/images/image.7282c21ac6fe23917fc0.jpg) no-repeat center center fixed;
     background-size: cover;
     background-attachment: fixed;
 }
@@ -497,7 +497,7 @@ nav ul li a:hover {
 
 /* Seção Contato */
 .section-contato {
-    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(/assets/images/image.7282c21ac6fe23917fc0.jpg) no-repeat center center fixed;
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(/nova-vida-site-teste/assets/images/image.7282c21ac6fe23917fc0.jpg) no-repeat center center fixed;
     background-size: cover;
     background-attachment: fixed;
     display: flex;
@@ -807,7 +807,7 @@ hr {
 /* MINISTÉRIOS */
 
 .section-ministerios {
-    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(/assets/images/image.7282c21ac6fe23917fc0.jpg) no-repeat center center fixed;
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(/nova-vida-site-teste/assets/images/image.7282c21ac6fe23917fc0.jpg) no-repeat center center fixed;
     background-size: cover;
     background-attachment: fixed;
     position: relative;
@@ -1282,7 +1282,7 @@ hr {
     height: 200px;
     margin: 20px auto 0;
     border-radius: 8px;
-    background-image: url(/assets/images/qrcode_pix.c8c9f231534cfd1b605d.png);
+    background-image: url(/nova-vida-site-teste/assets/images/qrcode_pix.c8c9f231534cfd1b605d.png);
     /* caminho relativo da imagem */
     background-size: cover;
     background-position: center;
@@ -1371,7 +1371,7 @@ svg {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
     background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.7)),
-                url(/assets/images/image.7282c21ac6fe23917fc0.jpg) no-repeat center center;
+                url(/nova-vida-site-teste/assets/images/image.7282c21ac6fe23917fc0.jpg) no-repeat center center;
     background-size: cover;
     z-index: -1;
 
@@ -2114,4 +2114,4 @@ svg {
 
 
 
-/*# sourceMappingURL=styles.db8e66f7424ca3c223f5.css.map*/
+/*# sourceMappingURL=styles.ea7b7448fc9a392c7218.css.map*/
