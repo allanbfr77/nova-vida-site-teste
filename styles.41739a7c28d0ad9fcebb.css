@@ -662,6 +662,20 @@ nav ul li a:hover {
             -webkit-transform: translateZ(0);
             transform: translateZ(0);
         }
+
+        /*
+         * iPhone Safari: blur + sombra grande em card grande gera micro travadas no scroll.
+         * Mantemos o visual próximo, mas com composição mais leve.
+         */
+        .historia-container {
+            -webkit-backdrop-filter: none;
+            backdrop-filter: none;
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.14);
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+            will-change: auto;
+        }
     }
 }
 
@@ -2616,4 +2630,4 @@ svg {
 
 
 
-/*# sourceMappingURL=styles.2bfdb74ea9c6ee58c139.css.map*/
+/*# sourceMappingURL=styles.41739a7c28d0ad9fcebb.css.map*/
