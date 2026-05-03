@@ -1,3 +1,30 @@
+:root {
+    /* Altura da navbar fixa — manter igual a `header { height }` */
+    --navbar-height: 70px;
+
+    /* ============================================================
+       TAMANHO DA IMAGEM DOS MINISTÉRIOS (painel expandido)
+       Altere APENAS este valor para mudar o tamanho da imagem
+       em todos os breakpoints proporcionalmente.
+       Valores sugeridos: 1.0 = padrão | 1.35 = maior | 0.8 = menor
+    ============================================================ */
+    --ministerio-img-scale: 1.5;
+
+    /* Calculados automaticamente — não edite */
+    --ministerio-img-desktop:   calc(168px * var(--ministerio-img-scale));
+    --ministerio-img-desktop-vmin: calc(20vmin * var(--ministerio-img-scale));
+    --ministerio-img-md:        calc(260px * var(--ministerio-img-scale));
+    --ministerio-img-md-vmin:   calc(52vh  * var(--ministerio-img-scale));
+    --ministerio-img-panel:     calc(132px * var(--ministerio-img-scale));
+    --ministerio-img-panel-vmin: calc(26vmin * var(--ministerio-img-scale));
+    --ministerio-img-panel-img: calc(120px * var(--ministerio-img-scale));
+    --ministerio-img-panel-img-vmin: calc(24vmin * var(--ministerio-img-scale));
+    --ministerio-img-sm:        calc(200px * var(--ministerio-img-scale));
+    --ministerio-img-sm-vw:     calc(48vw  * var(--ministerio-img-scale));
+    --ministerio-img-xs-panel:  calc(122px * var(--ministerio-img-scale));
+    --ministerio-img-xs-vw:     calc(36vw  * var(--ministerio-img-scale));
+}
+
 html {
     scroll-behavior: smooth;
 }
@@ -58,10 +85,10 @@ footer {
     background-attachment: fixed, fixed;
 }
 
-/* Estilos do cabeçalho */
+/* Estilos do cabeçalho — fundo contínuo evita linha/sombra fantasma entre barra e página */
 header {
     color: whitesmoke;
-    padding: 15px 0;
+    padding: 8px 0;
     margin: 0;
     position: fixed;
     width: 100%;
@@ -71,15 +98,10 @@ header {
     justify-content: space-between;
     align-items: center;
     z-index: 5000;
-    height: 70px;
+    height: var(--navbar-height);
     overflow: visible;
-    transform: translateY(0);
-    transition: transform 0.3s ease;
-}
-
-/* Header some ao rolar para baixo (JS adiciona esta classe) */
-header.header--hidden {
-    transform: translateY(-100%);
+    box-sizing: border-box;
+    background: transparent;
 }
 
 /* Wrapper do header injetado: empilha acima do conteúdo (evita cards por cima da logo/menu) */
@@ -236,201 +258,129 @@ nav ul li a:hover {
 }
 
 .section-cultos-unificada {
-    height: 100vh;
-    height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    padding: 20px 5vw 24px;
-    background: transparent;
+    padding: 60px 5vw;
     font-family: 'Montserrat', sans-serif;
-    color: #f0f0f0;
-    box-sizing: border-box;
-}
-
-/* Na página de cultos, o calendário não precisa de 100vh */
-.section-cultos .section-cultos-unificada {
-    height: auto;
-    min-height: 0;
-    padding: 0 5vw 24px;
+    color: #333;
 }
 
 .cultos-eventos-container {
     display: flex;
-    align-items: stretch;
     gap: 40px;
     justify-content: center;
-    flex-wrap: nowrap;
+    align-items: stretch;
+    flex-wrap: wrap;
     max-width: 1600px;
     margin: 0 auto;
-    /* cresce para preencher toda a altura disponível da seção */
-    flex: 1 1 0;
-    min-height: 0;
-    width: 100%;
 }
 
-/* BLOCO: Cultos + Mapa */
-.cultos-box {
-    flex: 1 1 0;
-    min-width: 260px;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid #c9a84c;
-    border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-    padding: 8px 0 0 0;
-    overflow: hidden;
-}
-
-.cultos-conteudo {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    align-items: center;
+.cultos-box,
+.eventos-box {
     flex: 1;
+    min-width: 260px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 3px solid #ffffff;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    padding: 30px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
 }
 
-.cultos-info {
-    width: 100%;
-    text-align: center;
-    padding: 0;
-    margin: 0;
+.cultos-conteudo,
+.eventos-conteudo {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex: 1;
 }
 
 .cultos-info h2,
 .eventos-box h2 {
-    font-size: 1.4rem;
-    margin: 0 0 4px 0;
-    padding: 0 16px;
-    box-sizing: border-box;
-    color: #c9a84c;
+    font-size: 1.8rem;
+    margin: 0 0 10px 0;
+    color: #fff;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
-
-.cultos-info p {
-    font-size: 0.95rem;
-    margin: 0 0 3px 0;
-    padding: 0 16px;
-    color: #f0f0f0;
-    text-align: center;
-    width: 100%;
-    line-height: 1.4;
-}
-
-.cultos-horarios {
-    font-size: 0.95rem !important;
-    line-height: 1.4 !important;
-    margin: 0 0 3px 0 !important;
-}
-
-.cultos-endereco {
-    font-size: 0.95rem !important;
-    line-height: 1.4 !important;
-    margin: 0 0 12px 0 !important;
-    color: #f0f0f0 !important;
-}
-
-.cultos-info p strong {
-    color: #f0deb0;
-}
-
-.cultos-info p i {
-    color: #c9a84c;
-    margin-right: 8px;
-}
-
-/* Mapa */
-.cultos-mapa {
-    width: 100%;
-    flex: 1 1 0;
-    min-height: 0;
-    padding: 0 0 0 0;
-    box-sizing: border-box;
-    display: flex;
-    align-items: stretch;
-}
-
-.cultos-mapa iframe {
-    flex: 1 1 0;
-    width: 100%;
-    height: 100%;
-    min-height: 0;
-    border: none;
-    border-radius: 8px;
-    display: block;
-    filter: invert(0.9) hue-rotate(180deg) saturate(0.75) brightness(0.88);
-}
-
-
-
-/* BLOCO: Eventos */
-/* Página Cultos: container só com o calendário — largura total */
-.cultos-eventos-container > .eventos-box:only-child {
-    flex: 1 1 100%;
-    width: 100%;
-    max-width: 1000px;
-    margin: 0 auto;
-}
-
-.eventos-box {
-    flex: 1 1 0;
-    min-width: 260px;
-    min-height: 0;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid #c9a84c;
-    border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-    padding: 8px 0 0 0;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.eventos-header {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-}
-
-.eventos-box h3 {
-    font-size: 1.4rem;
-    margin-bottom: 20px;
-    color: #c9a84c;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     gap: 10px;
 }
 
-.eventos-subtitulo {
-    text-align: center;
-    font-size: 0.95rem;
-    line-height: 1.4;
-    color: #f0f0f0;
-    margin: 0 0 3px 0;
-    padding: 0 16px;
+.cultos-info h2 i,
+.eventos-box h2 i {
+    color: #ffcc00;
 }
 
-.eventos-subtitulo:last-of-type {
+.cultos-info p,
+.evento-mini p {
+    font-size: 1.1rem;
     margin-bottom: 12px;
+    color: #fff;
+}
+
+.cultos-info p strong,
+.eventos-header p {
+    color: #fff;
+}
+
+.cultos-info p i {
+    color: #e74c3c;
+    margin-right: 8px;
+}
+
+/* Mapa e calendário com mesmas projeções */
+.cultos-mapa,
+#calendar-container {
+    flex: 1;
+    min-height: 380px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-sizing: border-box;
+    /* Fundo atrás do embed (filtro pode deixar 1px de borda) */
+    background: #1a1814;
+}
+
+/* Tema escuro nos embeds (Google Maps + Calendar): inversão controlada na viewport */
+.cultos-mapa iframe,
+#calendar-container iframe {
+    width: 100%;
+    height: 100%;
+    min-height: 380px;
+    border: none;
+    display: block;
+    filter: invert(0.92) hue-rotate(180deg) saturate(0.72) brightness(0.9);
+    -webkit-filter: invert(0.92) hue-rotate(180deg) saturate(0.72) brightness(0.9);
+}
+
+.cultos-mapa iframe {
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.cultos-mapa iframe:hover {
+    transform: scale(1.03);
+    filter: invert(0.94) hue-rotate(180deg) saturate(0.78) brightness(0.95);
+    -webkit-filter: invert(0.94) hue-rotate(180deg) saturate(0.78) brightness(0.95);
+}
+
+/* Eventos */
+.eventos-header {
+    margin-bottom: 4px;
+}
+
+.eventos-subtitulo {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.85);
+    margin: 4px 0;
 }
 
 .evento-mini {
-    background: rgba(201, 168, 76, 0.12);
-    border-left: 4px solid #c9a84c;
+    background-color: #fffbe5;
+    border-left: 4px solid #ffcc00;
+    border-radius: 0 8px 8px 0;
     padding: 12px 15px;
     margin-bottom: 15px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
     transition: transform 0.2s ease-in-out;
 }
 
@@ -438,43 +388,21 @@ nav ul li a:hover {
     transform: translateY(-3px);
 }
 
-.evento-mini strong {
-    color: #f0deb0;
-    font-size: 1rem;
-}
+/* Responsivo */
+@media (max-width: 768px) {
+    .cultos-eventos-container {
+        flex-direction: column;
+    }
 
-.evento-mini p {
-    font-size: 0.95rem;
-    color: #d0d0d0;
-    margin-top: 5px;
-}
+    .cultos-mapa,
+    #calendar-container {
+        min-height: 300px;
+    }
 
-/* Google Calendar — iframe com fundo escuro sobreposto */
-#calendar-container {
-    overflow: hidden;
-    position: relative;
-    padding: 0;
-    box-sizing: border-box;
-    width: 100%;
-    flex: 1 1 0;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
-}
-
-#calendar-container iframe {
-    width: 100%;
-    flex: 1 1 0;
-    height: 100%;
-    min-height: 0;
-    display: block;
-    border-radius: 8px;
-    filter: invert(0.9) hue-rotate(180deg) saturate(0.75) brightness(0.88);
-}
-
-.cultos-info h2 i,
-.eventos-box h2 i {
-    color: #ffcc00;
+    .cultos-mapa iframe,
+    #calendar-container iframe {
+        min-height: 300px;
+    }
 }
 
 .section-historia {
@@ -1032,8 +960,8 @@ hr {
     min-height: 100dvh;
     display: flex;
     flex-direction: column;
-    /* Header é absolute: reserva altura para não invadir logo/menu hambúrguer */
-    padding-top: calc(70px + env(safe-area-inset-top, 0px) + 16px);
+    /* Alinha com a altura real do header fixo (70px + safe area) — sem folga extra que virava “faixa” clara */
+    padding-top: calc(70px + env(safe-area-inset-top, 0px));
 }
 
 /* Camada de fundo: fixed na viewport; foto em cover (preenche a tela), igual às demais páginas */
@@ -1098,8 +1026,7 @@ hr {
     max-width: none;
     min-width: 0;
     box-sizing: border-box;
-    aspect-ratio: 325 / 350;
-    height: auto;
+    height: 300px;
     justify-self: stretch;
     border-radius: 10px;
     border: 1px solid #c9a84c;
@@ -1243,7 +1170,14 @@ hr {
     .section-ministerios .cards-container .card:hover {
         border-color: #e8c96a;
         background: rgba(201, 168, 76, 0.18);
-        box-shadow: 0 0 0 2px rgba(201, 168, 76, 0.35), 0 8px 24px rgba(0, 0, 0, 0.35);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .section-ministerios .cards-container .card:active,
+    .section-ministerios .cards-container .card:focus-visible {
+        outline: none;
+        border-color: #e8c96a;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
     }
 }
 
@@ -1260,8 +1194,17 @@ hr {
     transition: all 0.5s ease;
 }
 
+/* Wrapper só organiza layout — sem “cartão” em volta do painel inteiro */
 .section-ministerios .expanded-content {
     margin-top: 0;
+    padding-left: 0;
+    padding-right: 0;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+    outline: none;
+    background: transparent;
+    transition: none;
 }
 
 /* Painel expandido acima da camada ::before da seção */
@@ -1270,25 +1213,178 @@ hr {
     z-index: 2;
 }
 
-/* Quando ativo, ocupa toda a altura visível abaixo do header */
+/* Painel aberto: sem rolagem interna no wrapper; cartão tem altura padronizada no desktop */
 .section-ministerios #expanded-content:not(.hidden) {
-    min-height: calc(100vh - 70px - env(safe-area-inset-top, 0px) - 16px);
-    min-height: calc(100dvh - 70px - env(safe-area-inset-top, 0px) - 16px);
+    --ministerios-panel-vpad: 8px;
+    min-height: 0;
     display: flex;
     flex-direction: column;
+    align-items: center;
     justify-content: center;
-    padding: 24px clamp(20px, 4vw, 48px);
+    padding: var(--ministerios-panel-vpad) clamp(16px, 4vw, 40px);
     box-sizing: border-box;
     max-width: 1780px;
     width: 100%;
     margin-left: auto;
     margin-right: auto;
+    flex-grow: 1;
+    align-self: stretch;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
 }
 
-.section-ministerios #expanded-content:not(.hidden) .expanded-item--invb {
-    max-width: 100%;
-    margin-left: 0;
-    margin-right: 0;
+/* Com detalhe aberto esconde a grade até fechar o painel */
+.section-ministerios #expanded-content:not(.hidden) ~ .cards-container {
+    display: none !important;
+}
+
+/* Rodapé só volta quando o painel fecha — evita faixa preta no meio da tela */
+.section-ministerios #expanded-content:not(.hidden) ~ #footer {
+    display: none !important;
+}
+
+/* Painel aberto: uma única “tela” sem scroll na página */
+body:has(.section-ministerios #expanded-content:not(.hidden)) {
+    overflow: hidden;
+}
+
+.section-ministerios:has(#expanded-content:not(.hidden)) {
+    width: 75%;
+    height: 30vh;
+    margin: 0 auto;
+    overflow: hidden;
+    overscroll-behavior: none;
+    box-sizing: border-box;
+}
+
+.section-ministerios:has(#expanded-content:not(.hidden)) #expanded-content:not(.hidden) {
+    flex: 1 1 0;
+    min-height: 0;
+    max-height: none;
+    padding: 5vh;
+}
+
+/* Cartão ocupa toda a altura útil do painel (filho direto ao clonar no JS) */
+.section-ministerios #expanded-content:not(.hidden) > .expanded-item.expanded-item--invb {
+    flex: 1 1 0;
+    min-height: 0;
+    max-height: 100%;
+    width: 100%;
+    max-width: min(1040px, 100%);
+    margin-inline: auto;
+    gap: clamp(0.45rem, 1.4vmin, 0.85rem);
+
+}
+
+/*
+ * Desktop (≥768px): mesmo modelo flex em coluna — header (figura + títulos) centrado,
+ * texto em fluxo, bloco “As atividades…” + lista ancora na base via margin-top: auto no lead-in.
+ */
+@media (min-width: 768px) {
+    .section-ministerios #expanded-content:not(.hidden) {
+        justify-content: stretch;
+        align-items: stretch;
+        box-sizing: border-box;
+    }
+
+    .section-ministerios #expanded-content:not(.hidden) .expanded-item--invb .expanded-item__figure {
+        flex-shrink: 0;
+        max-height: min(calc(172px * var(--ministerio-img-scale)), calc(21vmin * var(--ministerio-img-scale)));
+        padding: 0;
+        margin: 0;
+        overflow: hidden;
+    }
+
+    .section-ministerios #expanded-content:not(.hidden) .expanded-item--invb .expanded-item__figure .expanded-image {
+        max-height: min(calc(158px * var(--ministerio-img-scale)), calc(19.5vmin * var(--ministerio-img-scale)));
+        max-width: min(calc(440px * var(--ministerio-img-scale)), 94%);
+    }
+
+    .section-ministerios #expanded-content:not(.hidden) .expanded-item--invb .ministerio-expanded-title {
+        flex-shrink: 0;
+        margin: 0 0 0.95rem;
+        gap: 0.28rem;
+    }
+
+    .section-ministerios #expanded-content:not(.hidden) .expanded-item--invb .ministerio-expanded-title__label {
+        font-size: clamp(0.72rem, 0.48rem + 1.05vmin, 0.95rem);
+        line-height: 1.35;
+    }
+
+    .section-ministerios #expanded-content:not(.hidden) .expanded-item--invb .ministerio-expanded-title__name {
+        font-size: clamp(1.12rem, 0.58rem + 2.65vmin, 1.92rem);
+        line-height: 1.25;
+    }
+
+    .section-ministerios #expanded-content:not(.hidden)
+        .expanded-item--invb
+        .expanded-text
+        p:not(.ministerio-lead-in) {
+        color: #d4c9a8;
+        font-size: clamp(15px, 0.9rem + 0.35vmin, 16px);
+        line-height: 1.45;
+        text-align: left;
+        hyphens: manual;
+        flex-shrink: 1;
+        min-height: 0;
+        margin: 0 0 0.45rem;
+    }
+
+    /* Só o texto “As atividades incluem:” (desktop, painel aberto) */
+    .section-ministerios #expanded-content:not(.hidden) .expanded-item--invb .ministerio-lead-in {
+        flex-shrink: 0;
+        margin-top: 0.85rem;
+        padding-top: 0.15rem;
+        font-size: clamp(0.92rem, 0.34rem + 0.85vmin, 0.78rem);
+        line-height: 1.35;
+    }
+
+    /* Coluna única: evita desnível entre células de alturas diferentes em grid 2 colunas */
+    .section-ministerios #expanded-content:not(.hidden) .expanded-item--invb .ministerio-atividades {
+        flex: 0 1 auto;
+        min-height: 0;
+        overflow: hidden;
+        padding-top: 0.35rem;
+        flex-shrink: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .section-ministerios #expanded-content:not(.hidden) .expanded-item--invb .ministerio-atividades li {
+        padding: 0.2rem 0.2rem 0.2rem 1.65rem;
+        margin: 0;
+        border-bottom: none;
+        font-size: clamp(0.8rem, 0.42rem + 0.95vmin, 0.95rem);
+        line-height: 1.42;
+        text-align: left;
+        hyphens: manual;
+    }
+
+    /* Mesmo marcador ✓ para todos os ministérios (incl. Louvor) */
+    .section-ministerios #expanded-content:not(.hidden) .expanded-item--invb .ministerio-atividades li::before {
+        top: 0.36rem;
+        left: 0.04rem;
+        font-size: 0.62rem;
+    }
+
+    .section-ministerios #expanded-content:not(.hidden) .expanded-item--invb .expanded-text {
+        flex: 1 1 0;
+        min-height: 0;
+        overflow: hidden;
+        gap: 0.35rem;
+    }
+
+    /* CTA colado na base do cartão, acima da borda; respiro vem do padding do card */
+    .section-ministerios #expanded-content:not(.hidden) .expanded-item--invb .ministerio-card-footer {
+        margin-top: auto;
+        padding-top: 0.85rem;
+        padding-bottom: 0;
+    }
 }
 
 .expanded-container {
@@ -1329,9 +1425,16 @@ hr {
     text-align: center;
 }
 
-/* --- Painel detalhe dos ministérios (paleta marrom/dourada INVB) --- */
-.expanded-item--invb {
+/* --- Painel detalhe dos ministérios (paleta marrom/dourada INVB): coluna única flex --- */
+.expanded-item.expanded-item--invb {
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: max(24px, env(safe-area-inset-top, 0px)) max(24px, env(safe-area-inset-right, 0px))
+        max(24px, env(safe-area-inset-bottom, 0px)) max(24px, env(safe-area-inset-left, 0px));
+    gap: 1rem;
     background: linear-gradient(
         165deg,
         rgba(58, 46, 34, 0.72) 0%,
@@ -1340,38 +1443,65 @@ hr {
     );
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
-    border: 1px solid rgba(201, 168, 76, 0.45);
-    box-shadow:
-        0 10px 36px rgba(0, 0, 0, 0.28),
-        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(201, 168, 76, 0.38);
+    outline: none;
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.28);
     color: #ebe2d6;
-    gap: clamp(1.25rem, 3vw, 2rem);
     max-width: 100%;
     margin-left: auto;
     margin-right: auto;
+    isolation: isolate;
+    -webkit-tap-highlight-color: transparent;
 }
 
-.expanded-item--invb .expanded-text {
+.expanded-item--invb:hover {
+    transform: none;
+}
+
+.expanded-item--invb:active,
+.expanded-item--invb:focus,
+.expanded-item--invb:focus-visible {
+    outline: none;
+    border-color: rgba(201, 168, 76, 0.38);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.28);
+}
+
+.expanded-item--invb .expanded-text{
     color: #ebe2d6;
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    text-align: left;
+    
 }
 
-/* Área da foto: mesma coluna para todos; altura segue o bloco de texto; imagem sempre inteira (contain) */
+/* Figura + títulos: header visual centrado na largura do cartão */
 .expanded-item--invb .expanded-item__figure {
-    flex: 0 1 46%;
-    max-width: 50%;
-    min-width: min(220px, 42vw);
+    box-sizing: border-box;
+    flex: 0 0 auto;
+    width: 100%;
+    max-width: 100%;
     align-self: stretch;
     position: relative;
     border: none;
+    outline: none;
     box-shadow: none;
     border-radius: 0;
     background: transparent;
-    overflow: visible;
+    margin: 0;
+    padding: 0;
+    /* Altura do bloco da imagem — controlada por --ministerio-img-scale no :root */
+    height: auto;
+    max-height: min(var(--ministerio-img-desktop), var(--ministerio-img-desktop-vmin));
+    min-height: 0;
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px clamp(12px, 2.5vw, 24px) 10px 8px;
-    min-height: min(300px, 40vh);
 }
 
 .expanded-item--invb .expanded-item__figure::after {
@@ -1379,26 +1509,7 @@ hr {
 }
 
 .expanded-item--invb .expanded-item__figure::before {
-    content: "";
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 3px;
-    height: calc(100% - 16px);
-    min-height: 300px;
-    max-height: min(92%, 500px);
-    border-radius: 2px;
-    background: linear-gradient(
-        180deg,
-        rgba(245, 230, 168, 0.45) 0%,
-        #e8c96a 8%,
-        #f5e6a8 50%,
-        #e8c96a 92%,
-        rgba(245, 230, 168, 0.45) 100%
-    );
-    pointer-events: none;
-    z-index: 2;
+    display: none;
 }
 
 .expanded-item--invb .expanded-item__figure .expanded-image {
@@ -1406,6 +1517,7 @@ hr {
     outline: none;
     box-shadow: none;
     border-radius: 0;
+    margin: 0;
     width: auto;
     height: auto;
     max-width: 100%;
@@ -1420,8 +1532,10 @@ hr {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.4rem;
-    margin: 0 0 1.15rem;
+    align-self: center;
+    width: 100%;
+    gap: 0.35rem;
+    margin: 0 0 0.35rem;
     text-align: center;
 }
 
@@ -1430,6 +1544,7 @@ hr {
     font-size: clamp(0.8rem, 1vw, 0.95rem);
     letter-spacing: 0.16em;
     font-weight: 600;
+    line-height: 1.6;
     text-transform: uppercase;
     color: #c9a84c;
 }
@@ -1440,43 +1555,57 @@ hr {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.07em;
+    line-height: 1.6;
     color: #ffcc00;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 .expanded-item--invb .expanded-text p:not(.ministerio-lead-in) {
-    color: #dfd5c8;
-    font-size: clamp(1rem, 1.2vw, 1.2rem);
-    line-height: 1.78;
+    color: #d4c9a8;
+    font-size: clamp(15px, 0.92rem + 0.35vw, 16px);
+    line-height: 1.6;
+    margin: 0;
+    text-align: left;
+    hyphens: manual;
 }
 
 .expanded-item--invb .ministerio-lead-in {
-    margin-top: 1.1rem;
-    margin-bottom: 0.35rem;
+    margin-top: auto;
+    margin-bottom: 0;
+    padding-top: 0.35rem;
     font-weight: 600;
     font-size: clamp(1rem, 1.15vw, 1.15rem);
     letter-spacing: 0.05em;
-    color: #c9a84c;
+    line-height: 1.6;
+    color: #e8cf6e;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    text-align: center;
 }
 
 .expanded-item--invb .ministerio-atividades {
     list-style: none;
-    padding: 0;
-    margin: 0.25rem 0 0;
+    padding: 0.35rem 0 0;
+    margin: 0;
+    box-sizing: border-box;
+    flex: 0 0 auto;
+    width: 100%;
+    border-top: 1px solid rgba(201, 168, 76, 0.18);
 }
 
 .expanded-item--invb .ministerio-atividades li {
     position: relative;
-    padding: 0.82rem 0.5rem 0.82rem 2.4rem;
+    padding: 0.5rem 0 0.5rem 2.25rem;
     margin: 0;
-    border-bottom: 1px solid rgba(201, 168, 76, 0.14);
+    border-bottom: 1px solid rgba(201, 168, 76, 0.12);
     color: #e8dfd0;
     font-size: clamp(0.95rem, 1.1vw, 1.1rem);
     line-height: 1.6;
+    text-align: left;
 }
 
 .expanded-item--invb .ministerio-atividades li:last-child {
     border-bottom: 0;
+    padding-bottom: 0;
 }
 
 .expanded-item--invb .ministerio-atividades li::before {
@@ -1484,24 +1613,60 @@ hr {
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
     position: absolute;
-    left: 0.15rem;
-    top: 0.82rem;
+    left: 0.12rem;
+    top: 0.72rem;
     width: 1.35rem;
     text-align: center;
     font-size: 0.68rem;
+    line-height: 1;
     color: #c9a84c;
     opacity: 0.95;
 }
 
-.expanded-item--invb[data-id="louvor"] .ministerio-atividades li::before {
-    content: "\f001";
-    font-size: 0.72rem;
-}
-
 .expanded-item--invb[data-id="introducao"] .ministerio-expanded-title__name {
     font-size: clamp(1.3rem, 2.5vw, 1.9rem);
-    line-height: 1.28;
+    line-height: 1.6;
     max-width: min(100%, 24rem);
+}
+
+.expanded-item--invb .ministerio-card-footer {
+    flex-shrink: 0;
+    margin-top: auto;
+    padding-top: 0.65rem;
+    padding-bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.expanded-item--invb .ministerio-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.55rem 1.35rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: clamp(0.8rem, 0.75rem + 0.25vw, 0.9rem);
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    text-transform: uppercase;
+    color: #1f1810;
+    background: linear-gradient(180deg, #f2d57a 0%, #d4a832 55%, #b88920 100%);
+    border: 1px solid rgba(232, 201, 120, 0.95);
+    border-radius: 0.45rem;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
+    transition: filter 0.2s ease, transform 0.15s ease;
+}
+
+.expanded-item--invb .ministerio-cta-btn:hover {
+    filter: brightness(1.06);
+    transform: translateY(-1px);
+}
+
+.expanded-item--invb .ministerio-cta-btn:active {
+    transform: translateY(0);
+    filter: brightness(0.98);
 }
 
 /* Ministérios: card ativo some da grade enquanto o painel detalhe está aberto */
@@ -2160,6 +2325,15 @@ svg {
         height: auto;
         min-width: 250px;
     }
+
+    /* Home: mapa/calendário seguem a coluna flex (evita height:auto “solto”) */
+    .section-index .cultos-mapa,
+    .section-index #calendar-container {
+        height: 100%;
+        min-height: 0;
+        flex: 1 1 0;
+    }
+
     #esconder{
         display: block;
     }
@@ -2193,17 +2367,13 @@ svg {
 
 /* ===== MENU MOBILE – TAP-FRIENDLY ===== */
 @media (max-width: 1024px) {
-    header.header--hidden {
-        transform: translateY(0) !important;
-    }
-
     header {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
-        background: rgba(0, 0, 0, 0.82);
         backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
     }
 
     #esconder{
@@ -2367,22 +2537,16 @@ svg {
     }
 
     .expanded-item--invb .expanded-item__figure {
-        flex: 1 1 auto;
+        flex: 0 0 auto;
         max-width: 100%;
         width: 100%;
         align-self: stretch;
-        min-height: min(240px, 42vh);
+        min-height: 0;
         max-height: none;
+        height: auto;
         aspect-ratio: auto;
-        border: none;
-        box-shadow: none;
-        border-radius: 0;
-        background: transparent;
-        overflow: visible;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 12px 16px 18px;
+        margin: 0;
+        padding: 0;
     }
 
     .expanded-item--invb .expanded-item__figure::after {
@@ -2394,32 +2558,14 @@ svg {
         height: auto;
         min-height: 0;
         max-width: 100%;
-        max-height: min(260px, 52vh);
+        max-height: min(var(--ministerio-img-md), var(--ministerio-img-md-vmin));
         aspect-ratio: auto;
         object-fit: contain;
         object-position: center;
     }
 
-    /* Coluna: traço horizontal sob a foto (todos os ministérios) */
     .expanded-item--invb .expanded-item__figure::before {
-        right: auto;
-        left: 50%;
-        top: auto;
-        bottom: 4px;
-        transform: translateX(-50%);
-        width: min(92%, 320px);
-        height: 3px;
-        min-height: 0;
-        max-height: none;
-        border-radius: 2px;
-        background: linear-gradient(
-            90deg,
-            rgba(245, 230, 168, 0.35) 0%,
-            #e8c96a 12%,
-            #f5e6a8 50%,
-            #e8c96a 88%,
-            rgba(245, 230, 168, 0.35) 100%
-        );
+        display: none;
     }
 
     /* Sem “zoom” no toque — evita sensação estranha no painel */
@@ -2427,17 +2573,15 @@ svg {
         transform: none;
     }
 
-    /* Mesmo padrão INVB no mobile: tipografia, lista e áreas seguras */
+    /* Ministérios painel INVB mobile: mesmo flex em coluna (.expanded-item.expanded-item--invb mantém padding 24px na base) */
     .expanded-item--invb {
-        padding: clamp(12px, 3.2vw, 18px);
-        gap: clamp(12px, 3vw, 16px);
-        -webkit-tap-highlight-color: transparent;
+        gap: 0.875rem;
         touch-action: manipulation;
     }
 
     .expanded-item--invb .expanded-text h2.ministerio-expanded-title {
         font-size: inherit;
-        margin: 0 0 0.65rem;
+        margin: 0 0 0.35rem;
     }
 
     .expanded-item--invb .ministerio-expanded-title__label {
@@ -2449,42 +2593,38 @@ svg {
     .expanded-item--invb .ministerio-expanded-title__name {
         font-size: clamp(1.12rem, 5vw, 1.62rem);
         letter-spacing: 0.045em;
-        line-height: 1.22;
+        line-height: 1.6;
     }
 
     .expanded-item--invb .expanded-text p:not(.ministerio-lead-in) {
         font-size: clamp(0.93rem, 3.3vw, 1.06rem);
-        line-height: 1.68;
+        line-height: 1.6;
     }
 
     .expanded-item--invb .ministerio-lead-in {
         font-size: clamp(0.86rem, 2.8vw, 0.95rem);
-        margin-top: 0.75rem;
+        color: #ead47a;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.52);
     }
 
     .expanded-item--invb .ministerio-atividades li {
-        padding: 0.9rem 0.35rem 0.9rem 2.5rem;
-        min-height: 2.75rem;
+        padding: 0.62rem 0 0.62rem 2.35rem;
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         font-size: clamp(0.88rem, 3vw, 1rem);
+        line-height: 1.6;
     }
 
     .expanded-item--invb .ministerio-atividades li::before {
-        top: 50%;
-        transform: translateY(-50%);
-        left: 0.2rem;
-    }
-
-    .expanded-item--invb[data-id="louvor"] .ministerio-atividades li::before {
-        top: 50%;
-        transform: translateY(-50%);
+        top: 0.72rem;
+        transform: none;
+        left: 0.18rem;
     }
 
     .expanded-item--invb[data-id="introducao"] .ministerio-expanded-title__name {
         font-size: clamp(0.85rem, 4.5vw, 1.28rem);
         max-width: 100%;
-        line-height: 1.25;
+        line-height: 1.6;
     }
 
     /* texto abaixo da imagem com boa leitura */
@@ -2519,6 +2659,112 @@ svg {
         padding: 0 max(12px, env(safe-area-inset-right, 0px)) 0 max(12px, env(safe-area-inset-left, 0px));
         max-width: 100%;
         box-sizing: border-box;
+        border-radius: 0;
+        box-shadow: none;
+        background: transparent;
+    }
+
+    /* Painel mobile: mesma regra — sem scroll na página nem dentro do cartão (:has na section) */
+    .section-ministerios #expanded-content:not(.hidden) {
+        justify-content: stretch;
+        align-items: stretch;
+        overflow-y: hidden;
+        padding-top: var(--ministerios-panel-vpad);
+        padding-bottom: var(--ministerios-panel-vpad);
+        box-sizing: border-box;
+    }
+
+    .section-ministerios #expanded-content:not(.hidden) .expanded-item--invb .expanded-item__figure {
+        flex-shrink: 0;
+        max-height: min(var(--ministerio-img-panel), var(--ministerio-img-panel-vmin));
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+
+    .section-ministerios #expanded-content:not(.hidden) .expanded-item--invb .expanded-item__figure .expanded-image {
+        max-height: min(var(--ministerio-img-panel-img), var(--ministerio-img-panel-img-vmin));
+    }
+
+    .section-ministerios #expanded-content:not(.hidden) .expanded-item--invb .ministerio-expanded-title {
+        flex-shrink: 0;
+        margin: 0 0 0.75rem;
+        gap: 0.2rem;
+    }
+
+    .section-ministerios #expanded-content:not(.hidden) .expanded-item--invb .ministerio-expanded-title__label {
+        font-size: clamp(0.68rem, 0.4rem + 2.4vmin, 0.82rem);
+        line-height: 1.35;
+    }
+
+    .section-ministerios #expanded-content:not(.hidden) .expanded-item--invb .ministerio-expanded-title__name {
+        font-size: clamp(0.95rem, 0.55rem + 3.1vmin, 1.35rem);
+        line-height: 1.25;
+    }
+
+    .section-ministerios #expanded-content:not(.hidden)
+        .expanded-item--invb
+        .expanded-text
+        p:not(.ministerio-lead-in) {
+        color: #d4c9a8;
+        font-size: clamp(14px, 0.35rem + 2.6vmin, 16px);
+        line-height: 1.45;
+        margin: 0 0 0.4rem;
+        text-align: left;
+        hyphens: manual;
+        flex-shrink: 1;
+        min-height: 0;
+    }
+
+    .section-ministerios #expanded-content:not(.hidden) .expanded-item--invb .ministerio-lead-in {
+        flex-shrink: 0;
+        margin-top: 0.75rem;
+        padding-top: 0.1rem;
+        font-size: clamp(0.46rem, 0.28rem + 2.6vmin, 0.76rem);
+        line-height: 1.35;
+        color: #ead47a;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.52);
+    }
+
+    .section-ministerios #expanded-content:not(.hidden) .expanded-item--invb .ministerio-atividades {
+        flex: 0 1 auto;
+        min-height: 0;
+        overflow: hidden;
+        padding-top: 0.25rem;
+        flex-shrink: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .section-ministerios #expanded-content:not(.hidden) .expanded-item--invb .ministerio-atividades li {
+        padding: 0.08rem 0 0.08rem 1.58rem;
+        margin: 0;
+        border-bottom: none;
+        font-size: clamp(0.78rem, 0.34rem + 2.65vmin, 0.92rem);
+        line-height: 1.4;
+        min-height: 0;
+        text-align: left;
+        hyphens: manual;
+    }
+
+    .section-ministerios #expanded-content:not(.hidden) .expanded-item--invb .ministerio-atividades li::before {
+        top: 0.34rem;
+        transform: none;
+        font-size: 0.56rem;
+    }
+
+    .section-ministerios #expanded-content:not(.hidden) .expanded-item--invb .expanded-text {
+        flex: 1 1 0;
+        min-height: 0;
+        overflow: hidden;
+        gap: 0.3rem;
+    }
+
+    .section-ministerios #expanded-content:not(.hidden) .expanded-item--invb .ministerio-card-footer {
+        margin-top: auto;
+        padding-top: 0.75rem;
+        padding-bottom: 0;
     }
 
     .historia-container h2 {
@@ -2587,6 +2833,66 @@ svg {
         height: 300px; /* ajuste como quiser */
     }
 
+    /* Home: altura viewport − navbar; mapa e calendário dividem o espaço (sem 300px fixo) */
+    .section-index .section-cultos-unificada {
+        height: calc(100dvh - var(--navbar-height));
+        max-height: calc(100dvh - var(--navbar-height));
+        min-height: 0;
+        overflow: hidden;
+        box-sizing: border-box;
+        scroll-margin-top: var(--navbar-height);
+        padding-top: max(8px, env(safe-area-inset-top, 0px));
+        padding-bottom: max(12px, env(safe-area-inset-bottom, 0px));
+        padding-left: clamp(14px, 4vw, 28px);
+        padding-right: clamp(14px, 4vw, 28px);
+    }
+
+    .section-index .cultos-eventos-container {
+        flex: 1 1 0;
+        min-height: 0;
+        max-height: 100%;
+        overflow: hidden;
+        align-items: stretch;
+        gap: clamp(12px, 3vw, 20px);
+    }
+
+    .section-index .cultos-box,
+    .section-index .eventos-box {
+        flex: 1 1 0;
+        min-height: 0;
+        overflow: hidden;
+        padding: 10px clamp(10px, 3vw, 16px) 12px;
+        background-color: rgba(255, 255, 255, 0.1);
+        border: 1px solid #c9a84c;
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+    }
+
+    .section-index .cultos-mapa,
+    .section-index #calendar-container {
+        flex: 1 1 0;
+        min-height: 0;
+        height: 100%;
+        max-height: 100%;
+    }
+
+    .section-index .cultos-conteudo {
+        flex: 1 1 0;
+        min-height: 0;
+    }
+
+    .section-index .cultos-mapa iframe,
+    .section-index #calendar-container iframe {
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+        max-height: 100%;
+        display: block;
+        border: none;
+    }
+
     .section-home .text h1 {
         font-size: 2.3rem;
     }
@@ -2610,13 +2916,20 @@ svg {
         aspect-ratio: auto;
         min-height: 0;
         max-width: 100%;
-        max-height: min(200px, 48vw);
+        max-height: min(var(--ministerio-img-sm), var(--ministerio-img-sm-vw));
         object-fit: contain;
     }
 
     .expanded-item--invb .ministerio-atividades li {
-        min-height: 3rem;
-        padding-left: 2.55rem;
+        padding-left: 2.35rem;
+    }
+
+    .section-ministerios #expanded-content:not(.hidden) .expanded-item--invb .expanded-item__figure .expanded-image {
+        max-height: min(var(--ministerio-img-xs-panel), var(--ministerio-img-xs-vw));
+    }
+
+    .section-ministerios #expanded-content:not(.hidden) .expanded-item--invb .ministerio-atividades li {
+        min-height: 0;
     }
 }
 
@@ -2665,4 +2978,3 @@ header {
     left: 0;
     width: 100%;
 }
-

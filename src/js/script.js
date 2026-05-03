@@ -1,24 +1,18 @@
 import "../css/styles.css";
 document.addEventListener("DOMContentLoaded", async () => {
     await loadComponent("#header", "header.html");
-    setupDesktopMinistrySubmenu();
     await setupMobileMenu();
 
     await loadComponent("#footer", "footer.html");
 
-    // Fade das seções + hide/show do header ao rolar
-    let lastScrollY = window.scrollY;
-    const headerEl = document.querySelector('header');
-
+    // Fade
     window.addEventListener('scroll', function () {
-        const currentScrollY = window.scrollY;
-
-        // Fade das seções (só na home)
         const homeSection = document.querySelector('.section-home');
         const eventosCultosSection = document.querySelector('.section-cultos-unificada');
         const historiaSection = document.querySelector('.section-historia');
+
         if (homeSection && eventosCultosSection && historiaSection) {
-            if (currentScrollY > 100) {
+            if (window.scrollY > 100) {
                 homeSection.classList.add('fade-out');
                 eventosCultosSection.style.opacity = 1;
                 historiaSection.style.opacity = 1;
@@ -28,93 +22,43 @@ document.addEventListener("DOMContentLoaded", async () => {
                 historiaSection.style.opacity = 0;
             }
         }
-
-        // Header visível só no topo; some ao rolar para baixo e não volta até retornar ao topo
-        if (headerEl) {
-            if (currentScrollY < 60) {
-                headerEl.classList.remove('header--hidden');
-            } else {
-                headerEl.classList.add('header--hidden');
-            }
-        }
-
-        lastScrollY = currentScrollY;
-    }, { passive: true });
-
-    
+    });
 
     // Pix
     const botao = document.getElementById("copiar-btn");
     if (botao) botao.addEventListener("click", copiarPix);
 
-    // Cards de ministérios: ao expandir, o card some da grade até fechar o painel
-    const ministeriosSection = document.querySelector('.section-ministerios');
+    // Cards
+    const cards = document.querySelectorAll('.card');
     const expandedContent = document.getElementById('expanded-content');
-    const ministryCards = ministeriosSection
-        ? ministeriosSection.querySelectorAll('.cards-container .card')
-        : [];
-
-    function ministryClearHiddenCards() {
-        if (!ministeriosSection) return;
-        ministeriosSection.querySelectorAll('.cards-container .card.card--ministry-hidden').forEach((el) => {
-            el.classList.remove('card--ministry-hidden');
-        });
-    }
-
-    /** Mobile (≤767px, mesma faixa do grid em coluna única): fila circular — o card do topo vai para o fim ao ser escolhido. */
-    function ministryIsMobileCardQueueViewport() {
-        return typeof window.matchMedia === 'function'
-            && window.matchMedia('(max-width: 767px)').matches;
-    }
-
-    function ministryRotateTopCardToEnd(card) {
-        if (!ministeriosSection || !card || !ministryIsMobileCardQueueViewport()) return;
-        const cardsContainer = ministeriosSection.querySelector('.cards-container');
-        if (!cardsContainer) return;
-        const cards = cardsContainer.querySelectorAll('.card');
-        if (cards.length <= 1) return;
-        const firstInDom = cardsContainer.querySelector('.card');
-        if (firstInDom !== card) return;
-        cardsContainer.appendChild(card);
-    }
-
-    if (ministeriosSection && expandedContent && ministryCards.length) {
-        ministryCards.forEach((card) => {
+    if (cards && expandedContent) {
+        cards.forEach((card) => {
             card.addEventListener("click", () => {
                 const id = card.id;
-                const item = ministeriosSection.querySelector(`#expanded-items .expanded-item[data-id="${id}"]`);
-                if (!item) return;
-                ministryClearHiddenCards();
-                ministryRotateTopCardToEnd(card);
                 expandedContent.innerHTML = "";
-                expandedContent.appendChild(item.cloneNode(true));
+                const item = document.querySelector(`#expanded-items .expanded-item[data-id="${id}"]`);
+                if (item) expandedContent.appendChild(item.cloneNode(true));
                 expandedContent.classList.remove("hidden");
-                card.classList.add('card--ministry-hidden');
-                window.scrollTo({ top: ministeriosSection.offsetTop, behavior: "smooth" });
+                expandedContent.scrollIntoView({ behavior: "smooth" });
             });
         });
         expandedContent.addEventListener('click', () => {
             expandedContent.classList.add('hidden');
             expandedContent.innerHTML = '';
-            ministryClearHiddenCards();
         });
     }
 
     // Query string ministério
     const urlParams = new URLSearchParams(window.location.search);
     const ministerioId = urlParams.get('ministerio');
-    if (ministerioId && ministeriosSection && expandedContent) {
-        const item = ministeriosSection.querySelector(`#expanded-items .expanded-item[data-id="${ministerioId}"]`);
-        if (item) {
-            ministryClearHiddenCards();
+    if (ministerioId) {
+        const expandedContent = document.getElementById('expanded-content');
+        const item = document.querySelector(`#expanded-items .expanded-item[data-id="${ministerioId}"]`);
+        if (expandedContent && item) {
             expandedContent.innerHTML = "";
             expandedContent.appendChild(item.cloneNode(true));
             expandedContent.classList.remove("hidden");
-            const cardEl = document.getElementById(ministerioId);
-            if (cardEl && ministeriosSection.querySelector('.cards-container')?.contains(cardEl)) {
-                cardEl.classList.add('card--ministry-hidden');
-            }
-            window.scrollTo({ top: ministeriosSection.offsetTop, behavior: "smooth" });
+            expandedContent.scrollIntoView({ behavior: "smooth" });
         }
     }
 
@@ -144,18 +88,14 @@ async function carregarEstudosBiblicos(tema) {
     const container = document.getElementById(`${tema}-container`);
     if (!container) return;
   
-    // Fecha outros temas abertos
     document.querySelectorAll('.aulas-container').forEach(div => {
       if (div !== container) div.classList.add('hidden');
     });
   
-    // Alterna visibilidade do tema clicado
     container.classList.toggle("hidden");
   
-    // Se estiver fechando, não precisa carregar de novo
     if (container.classList.contains("hidden")) return;
   
-    // Se já tiver conteúdo carregado, não recarrega
     if (container.children.length > 0) return;
 
     const basePath = "https://raw.githubusercontent.com/invbotafogo/invbotafogo/main/src/assets/pdfs";
@@ -204,7 +144,6 @@ async function carregarEstudosBiblicos(tema) {
     }
   
     const basePathImgES = "https://raw.githubusercontent.com/invbotafogo/invbotafogo/main/src/assets/imagesES";
-    // --- Espírito Santo ---
     if (tema === "espirito_santo") {
         const aulas = [
             { titulo: "Quem é o Espírito Santo?", imagem: `${basePathImgES}/1.jpg`, pdf: `${basePath}/ESPIRITO_Aula1.pdf` },
@@ -212,46 +151,40 @@ async function carregarEstudosBiblicos(tema) {
             { titulo: "O Espírito Santo e as Escrituras", imagem: `${basePathImgES}/3.jpg`, pdf: `${basePath}/ESPIRITO_Aula3.pdf` },
             { titulo: "Da criação até o nascimento de Jesus", imagem: `${basePathImgES}/4.jpg`, pdf: `${basePath}/ESPIRITO_Aula4.pdf` },
             { titulo: "Do nascimento de Jesus até Pentecostes", imagem: `${basePathImgES}/5.jpg`, pdf: `${basePath}/ESPIRITO_Aula5.pdf` },
-        
             { titulo: "Depois de Pentecostes", imagem: `${basePathImgES}/6.jpg`, pdf: `${basePath}/ESPIRITO_Aula6.pdf` },
             { titulo: "O Espírito Santo na vida do crente", imagem: `${basePathImgES}/7.jpg`, pdf: `${basePath}/ESPIRITO_Aula7.pdf` },
             { titulo: "A luta interior do crente", imagem: `${basePathImgES}/8.jpg`, pdf: `${basePath}/ESPIRITO_Aula8.pdf` },
             { titulo: "O batismo com o Espírito Santo", imagem: `${basePathImgES}/9.jpg`, pdf: `${basePath}/ESPIRITO_Aula9.pdf` },
             { titulo: "Pecados contra o Espírito Santo", imagem: `${basePathImgES}/10.jpg`, pdf: `${basePath}/ESPIRITO_Aula10.pdf` },
-            
-        
             { titulo: "O fruto do Espírito", imagem: `${basePathImgES}/11.png`, pdf: `${basePath}/ESPIRITO_Aula11.pdf` },
             { titulo: "Princípios e objetivos dos dons", imagem: `${basePathImgES}/12.png`, pdf: `${basePath}/ESPIRITO_Aula12.pdf` },
             { titulo: "Os dons de ministério", imagem: `${basePathImgES}/13.png`, pdf: `${basePath}/ESPIRITO_Aula13.pdf` },
             { titulo: "Os dons de serviço", imagem: `${basePathImgES}/14.png`, pdf: `${basePath}/ESPIRITO_Aula14.pdf` },
             { titulo: "Os dons de sinais", imagem: `${basePathImgES}/15.png`, pdf: `${basePath}/ESPIRITO_Aula15.pdf` },
-        
             { titulo: "Como reconhecer o seu dom", imagem: `${basePathImgES}/16.png`, pdf: `${basePath}/ESPIRITO_Aula16.pdf` },
             { titulo: "Como ficar cheio do Espírito Santo", imagem: `${basePathImgES}/17.png`, pdf: `${basePath}/ESPIRITO_Aula17.pdf` },
         ];
 
         aulas.forEach(aula => {
-        const card = document.createElement("div");
-        card.classList.add("aula-card");
+            const card = document.createElement("div");
+            card.classList.add("aula-card");
 
-        const midia = aula.imagem
-        ? `<img src="${aula.imagem}" alt="${aula.titulo}" class="video-thumb">`
-        : `<div class="sem-video" role="img" aria-label="Sem vídeo disponível">Sem vídeo</div>`;
+            const midia = aula.imagem
+            ? `<img src="${aula.imagem}" alt="${aula.titulo}" class="video-thumb">`
+            : `<div class="sem-video" role="img" aria-label="Sem vídeo disponível">Sem vídeo</div>`;
 
-        card.innerHTML = `
-            ${midia}
-            <h3>${aula.titulo}</h3>
-            <a href="${aula.pdf}" download class="btn">Baixar PDF</a>
-        `;
+            card.innerHTML = `
+                ${midia}
+                <h3>${aula.titulo}</h3>
+                <a href="${aula.pdf}" download class="btn">Baixar PDF</a>
+            `;
 
-        container.appendChild(card);
+            container.appendChild(card);
         });
     }
 
-
     const basePathImgCR = "https://raw.githubusercontent.com/invbotafogo/invbotafogo/main/src/assets/imagesCR";
 
-    // --- Cristologia ---
     if (tema == "cristologia") {
         const aulas = [
             { titulo: "Cristologia - Parte I", imagem: `${basePathImgCR}/1.png`, pdf: `${basePath}/CRISTOLOGIA_Aula1.pdf` },
@@ -262,28 +195,26 @@ async function carregarEstudosBiblicos(tema) {
         ];
 
         aulas.forEach(aula => {
-        const card = document.createElement("div");
-        card.classList.add("aula-card");
+            const card = document.createElement("div");
+            card.classList.add("aula-card");
 
-        const midia = aula.imagem
-        ? `<img src="${aula.imagem}" alt="${aula.titulo}" class="video-thumb">`
-        : `<div class="sem-video" role="img" aria-label="Sem vídeo disponível">Sem vídeo</div>`;
+            const midia = aula.imagem
+            ? `<img src="${aula.imagem}" alt="${aula.titulo}" class="video-thumb">`
+            : `<div class="sem-video" role="img" aria-label="Sem vídeo disponível">Sem vídeo</div>`;
 
-        card.innerHTML = `
-            ${midia}
-            <h3>${aula.titulo}</h3>
-            <a href="${aula.pdf}" download class="btn">Baixar PDF</a>
-        `;
+            card.innerHTML = `
+                ${midia}
+                <h3>${aula.titulo}</h3>
+                <a href="${aula.pdf}" download class="btn">Baixar PDF</a>
+            `;
 
-        container.appendChild(card);
+            container.appendChild(card);
         });
     }
-
 
     const basePathImgCC = "https://raw.githubusercontent.com/invbotafogo/invbotafogo/main/src/assets/imagesCC";
 
     if (tema === "evangelismo") {
-
         const aulas = [
             { titulo: "Capacitação para o Evangelismo - Parte I", videoID: "Hodgcydb7aY" },
             { titulo: "Capacitação para o Evangelismo - Parte II", videoID: "l2SjPiQY2do" },
@@ -321,39 +252,34 @@ async function carregarEstudosBiblicos(tema) {
         });
     }
 
-    // --- Capelania Cristã ---
     if (tema === "capelania") {
         const aulas = [
             { titulo: "Apostila", imagem: `${basePathImgCC}/capelania.jpg`, pdf: `${basePath}/CAPELANIA.pdf` },
         ];
 
         aulas.forEach(aula => {
-        const card = document.createElement("div");
-        card.classList.add("aula-card");
+            const card = document.createElement("div");
+            card.classList.add("aula-card");
 
-        const midia = aula.imagem
-        ? `<img src="${aula.imagem}" alt="${aula.titulo}" class="video-thumb">`
-        : `<div class="sem-video" role="img" aria-label="Sem vídeo disponível">Sem vídeo</div>`;
+            const midia = aula.imagem
+            ? `<img src="${aula.imagem}" alt="${aula.titulo}" class="video-thumb">`
+            : `<div class="sem-video" role="img" aria-label="Sem vídeo disponível">Sem vídeo</div>`;
 
-        card.innerHTML = `
-            ${midia}
-            <h3>${aula.titulo}</h3>
-            <a href="${aula.pdf}" download class="btn">Baixar PDF</a>
-        `;
+            card.innerHTML = `
+                ${midia}
+                <h3>${aula.titulo}</h3>
+                <a href="${aula.pdf}" download class="btn">Baixar PDF</a>
+            `;
 
-        container.appendChild(card);
+            container.appendChild(card);
         });
     }
-
-
-
 }
 
 window.carregarEstudosBiblicos = carregarEstudosBiblicos;
 
 async function loadComponent(selector, file) {
     try {
-        // Com <base href="..."> no build do GitHub Pages, URL relativa resolve como no dev.
         const response = await fetch(file);
         if (!response.ok) throw new Error(`Erro ao carregar ${file}`);
         const content = await response.text();
@@ -392,8 +318,6 @@ async function carregarVideos() {
     } catch (error) { console.error("Erro ao carregar vídeos:", error); }
 }
 
-
-// Função para inicializar o calendário (só em páginas que têm #calendar-container)
 function initializeCalendar() {
     const calendarContainer = document.getElementById('calendar-container');
     if (!calendarContainer) return;
@@ -405,34 +329,36 @@ function initializeCalendar() {
         const now = Date.now();
         const hoursSinceLastUpdate = (now - lastUpdate) / (1000 * 60 * 60);
 
-        // Atualiza a cada 6 horas ou se for forçado
         if (!force && hoursSinceLastUpdate < 6) return;
 
         lastUpdate = now;
         const width = window.innerWidth;
         let newMode = width < 450 ? "AGENDA" : "MONTH";
 
-        // Evita recriar se o modo for o mesmo
         if (newMode === lastMode && !force) return;
         lastMode = newMode;
 
-        const src = `https://calendar.google.com/calendar/embed?src=mdc.invb%40gmail.com&ctz=America%2FSao_Paulo&mode=${newMode}&showTitle=1&showPrint=0&showCalendars=0&showTz=0`;
+        /* color/bgcolor: tons escuros no chrome do embed (complementa o filter no CSS) */
+        const src = `https://calendar.google.com/calendar/embed?src=mdc.invb%40gmail.com&ctz=America%2FSao_Paulo&mode=${newMode}&showTitle=1&showPrint=0&showCalendars=0&showTz=0&color=%231a1814&bgcolor=%231a1814`;
 
-        // Verifica se já existe um iframe dentro do container
         let iframe = calendarContainer.querySelector('iframe');
         if (iframe) {
-            // Só atualiza o src e propriedades
             iframe.src = src;
-            iframe.height = '280';
+            iframe.style.width = '100%';
+            iframe.removeAttribute('width');
+            iframe.style.height = '100%';
+            iframe.style.minHeight = '380px';
+            iframe.removeAttribute('height');
             iframe.scrolling = newMode === 'AGENDA' ? 'yes' : 'no';
         } else {
-            // Cria o iframe apenas uma vez
             iframe = document.createElement('iframe');
             iframe.src = src;
-            iframe.width = '100%';
-            iframe.height = '280';
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+            iframe.style.minHeight = '380px';
             iframe.style.border = 'none';
-            iframe.style.borderRadius = '8px';
+            iframe.style.borderRadius = '12px';
+            iframe.style.display = 'block';
             iframe.frameBorder = '0';
             iframe.scrolling = newMode === 'AGENDA' ? 'yes' : 'no';
             calendarContainer.appendChild(iframe);
@@ -447,12 +373,10 @@ function initializeCalendar() {
         resizeTimeout = setTimeout(() => updateCalendar(true), 1000);
     });
 
-    // Atualiza automaticamente a cada 6 horas
     setInterval(() => updateCalendar(true), 6 * 60 * 60 * 1000);
 }
+
 initializeCalendar();
-
-
 
 function mostrarProximoCulto() {
     const container = document.getElementById("proximo-culto");
@@ -473,102 +397,39 @@ function mostrarProximoCulto() {
         })
         .filter(data => data > agora || (agora - data <= 2 * 60 * 60 * 1000))
         .sort((a, b) => a - b)[0];
-        if (!proximoCulto) return;
-            const horaFormatada = proximoCulto.toLocaleString('pt-BR', { weekday: 'long', hour: '2-digit', minute: '2-digit' });
-            const link = "https://www.youtube.com/@igrejadenovavidabotafogo3785/live";
-            const estaAoVivo = proximoCulto <= agora;
-            container.innerHTML = estaAoVivo
-            ? `🎥 Culto ao vivo agora! <a href="${link}" target="_blank">Clique para assistir</a>`
-            : `🗓️ Próximo culto: ${horaFormatada}. <a href="${link}" target="_blank">Clique para assistir</a>`;
+    if (!proximoCulto) return;
+    const horaFormatada = proximoCulto.toLocaleString('pt-BR', { weekday: 'long', hour: '2-digit', minute: '2-digit' });
+    const link = "https://www.youtube.com/@igrejadenovavidabotafogo3785/live";
+    const estaAoVivo = proximoCulto <= agora;
+    container.innerHTML = estaAoVivo
+        ? `🎥 Culto ao vivo agora! <a href="${link}" target="_blank">Clique para assistir</a>`
+        : `🗓️ Próximo culto: ${horaFormatada}. <a href="${link}" target="_blank">Clique para assistir</a>`;
 }
 
-/**
- * Desktop: submenu de Ministérios em position fixed no viewport (evita ficar atrás dos cards por stacking context).
- * Mobile (≤1024px): remove estilos inline — o CSS do menu coluna continua valendo.
- */
-function setupDesktopMinistrySubmenu() {
-    const menuItem = document.querySelector("li.menu-item");
-    const submenu = menuItem?.querySelector(".submenu");
-    if (!menuItem || !submenu) return;
-
-    const desktopMq = window.matchMedia("(min-width: 1025px)");
-
-    function clearFixedLayer() {
-        submenu.style.position = "";
-        submenu.style.top = "";
-        submenu.style.left = "";
-        submenu.style.right = "";
-        submenu.style.zIndex = "";
-        submenu.style.minWidth = "";
-    }
-
-    function repositionFixedSubmenu() {
-        if (!desktopMq.matches) {
-            clearFixedLayer();
-            return;
-        }
-        const r = menuItem.getBoundingClientRect();
-        submenu.style.position = "fixed";
-        submenu.style.top = `${Math.round(r.bottom)}px`;
-        submenu.style.left = `${Math.round(r.left)}px`;
-        submenu.style.right = "auto";
-        submenu.style.zIndex = "2147483647";
-        submenu.style.minWidth = `${Math.max(180, Math.round(r.width))}px`;
-    }
-
-    menuItem.addEventListener("mouseenter", repositionFixedSubmenu);
-    menuItem.addEventListener("mouseleave", () => {
-        if (desktopMq.matches) clearFixedLayer();
-    });
-    window.addEventListener("scroll", repositionFixedSubmenu, { passive: true });
-    window.addEventListener("resize", () => {
-        if (desktopMq.matches) repositionFixedSubmenu();
-        else clearFixedLayer();
-    });
-    desktopMq.addEventListener("change", () => {
-        if (!desktopMq.matches) clearFixedLayer();
-    });
-}
-
-// ==== Novo: toggle menu (sem aria) ====
 async function setupMobileMenu() {
     const btn = document.querySelector('.navbar__toggle');
     const menu = document.querySelector('#menu');
     if (!btn || !menu) return;
     const OPEN_CLASS = 'is-open';
-    const DESKTOP_BREAKPOINT = 1025;
-
     function openMenu() {
-        btn.classList.add('active');
+        btn.classList.toggle('active');
         menu.classList.add(OPEN_CLASS);
-        document.addEventListener('keydown', handleEsc);
-        queueMicrotask(() => {
-            document.addEventListener('click', handleOutsideClick);
-        });
+        document.addEventListener('click', handleOutsideClick);
+        document.addEventListener('keydown', handleEsc, { once: true });
     }
     function closeMenu() {
-        btn.classList.remove('active');
+        btn.classList.toggle('active');
         menu.classList.remove(OPEN_CLASS);
         document.removeEventListener('click', handleOutsideClick);
-        document.removeEventListener('keydown', handleEsc);
     }
     function toggleMenu() {
         menu.classList.contains(OPEN_CLASS) ? closeMenu() : openMenu();
     }
     function handleOutsideClick(e) {
-        if (!menu.contains(e.target) && !btn.contains(e.target)) closeMenu();
+        if (!menu.contains(e.target) && e.target !== btn) closeMenu();
     }
-    function handleEsc(e) {
-        if (e.key === 'Escape') closeMenu();
-    }
-    window.addEventListener('resize', () => {
-        if (window.innerWidth >= DESKTOP_BREAKPOINT) closeMenu();
-    });
-    menu.addEventListener('click', (e) => {
-        if (e.target.tagName === 'A') closeMenu();
-    });
-    btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        toggleMenu();
-    });
+    function handleEsc(e) { if (e.key === 'Escape') closeMenu(); }
+    window.addEventListener('resize', () => closeMenu());
+    menu.addEventListener('click', (e) => { if (e.target.tagName === 'A') closeMenu(); });
+    btn.addEventListener('click', (e) => { e.stopPropagation(); toggleMenu(); });
 }
